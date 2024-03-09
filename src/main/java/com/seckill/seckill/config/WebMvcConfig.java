@@ -6,12 +6,13 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.seckill.seckill.controller.interceptor.LoginInterceptor;
+import com.seckill.seckill.controller.interceptor.TokenInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer{
     
-    // @Autowired
-    // private LoginTicketInterceptor loginTicketInterceptor;
+    @Autowired
+    private TokenInterceptor tokenInterceptor;
 
     @Autowired
     private LoginInterceptor loginInterceptor;
@@ -24,8 +25,8 @@ public class WebMvcConfig implements WebMvcConfigurer{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // registry.addInterceptor(loginTicketInterceptor)
-        // .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
+        registry.addInterceptor(tokenInterceptor)
+        .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
         
         registry.addInterceptor(loginInterceptor)
         .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");

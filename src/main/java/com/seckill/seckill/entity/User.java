@@ -2,7 +2,7 @@ package com.seckill.seckill.entity;
 
 import java.util.Date;
 
-public class User {
+public class User{
     private int id;
     private String username;
     private String password;

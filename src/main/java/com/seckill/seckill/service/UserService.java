@@ -2,6 +2,7 @@ package com.seckill.seckill.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.seckill.seckill.dao.UserMapper;
@@ -29,6 +30,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
     
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    
     public RespBean login(String username, String password, int expiredSec, HttpServletResponse response, HttpServletRequest request) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
@@ -43,13 +47,13 @@ public class UserService {
 
         // generate token
         Token token = new Token();
-        token.setUserId(user.getId());
+        token.setUser(user);
         token.setToken(SeckillUtil.generateUUID());
         token.setStatus(0);
         token.setExpired(new Date(System.currentTimeMillis() + (long) expiredSec * 1000));
 
         // set token in session and cookie
-        request.getSession().setAttribute(token.getToken(), user);
+        // request.getSession().setAttribute(token.getToken(), user);
         Cookie cookie = new Cookie("token", token.getToken());
         cookie.setPath(contextPath);
         cookie.setMaxAge(expiredSec);
@@ -58,8 +62,12 @@ public class UserService {
         // set token in redis
         String redisKey = RedisUtil.getTokenKey(token.getToken());
         System.out.println(token.getToken());
-        // redisTemplate.opsForValue().set(redisKey, token);
+        redisTemplate.opsForValue().set(redisKey, token);
 
         return RespBean.success();
+    }
+
+    public Token findToken(String tokenString) {
+        return (Token) redisTemplate.opsForValue().get(RedisUtil.getTokenKey(tokenString));
     }
 }

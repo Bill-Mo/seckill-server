@@ -13,17 +13,6 @@ import com.seckill.seckill.entity.User;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MapperTest {
+public class RedisTest {
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private testMapper testMapper;
-    
-    @Test
-    public void testSelectUser() {
-        User user = testMapper.selectById(2);
-        System.out.println(user);
-    }
 }

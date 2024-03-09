@@ -7,19 +7,19 @@
         id, username, password, create_time
     </sql>
 
-    <select id="a" resultType="User">
+    <select id="selectById" resultType="com.seckill.seckill.entity.User">
         select <include refid="selectFields"></include>
         from user
         where id = #{id}
     </select>
 
-    <select id="selectByName" resultType="User">
+    <select id="selectByName" resultType="com.seckill.seckill.entity.User">
         select id, username, password, create_time
         from user
         where username = #{name}
     </select>
 
-    <insert id="insertUser" parameterType="User" keyProperty="id">
+    <insert id="insertUser" parameterType="com.seckill.seckill.entity.User" keyProperty="id">
         insert into user (username, password, create_time)
         values (#{username}, #{password}, #{createTime})
     </insert>

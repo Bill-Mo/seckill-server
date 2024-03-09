@@ -42,7 +42,7 @@ public class LoginController {
             System.out.println(respBean.getCode());
             if (respBean.getCode() == 200) {
                 
-                return "redirect:/items/list";
+                return "redirect:/goods/list";
             } else {
                 model.addAttribute("error", respBean.getMessage());
                 return "/login";

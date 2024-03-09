@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seckill.seckill.dao.GoodsMapper">
+    <select id="selectSeckillGoods" resultType="com.seckill.seckill.vo.SeckillGoodsVo">
+        select name, price, seckill_price, seckill_stock, start_time, end_time, status
+        from goods, seckill_goods
+        where goods.id = seckill_goods.goods_id
+        ;
+    </select>
+</mapper>
