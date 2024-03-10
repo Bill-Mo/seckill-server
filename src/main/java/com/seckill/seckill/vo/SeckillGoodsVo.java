@@ -12,10 +12,12 @@ import lombok.ToString;
 @Getter
 @ToString
 public class SeckillGoodsVo {
+    private int id;
     private String name;
     private double price;
     private double seckillPrice;
     private int seckillStock;
+    private String description;
     private Date startTime;
     private Date endTime;
     private int status;

@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.product:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+}
+
+.product-name {
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.product-price {
+    color: #888;
+    text-decoration: line-through;
+    margin-right: 10px;
+}
+
+.product-seckill-price {
+    color: #ff6347;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.product-stock {
+    color: #666;
+    margin-left: 20px;
+}
+
+.countdown {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.countdown.not-started {
+    color: #888;
+}
+
+.countdown.started {
+    color: #ff6347;
+    font-size: 18px;
+}
+
+.countdown.ended {
+    color: #ccc;
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}

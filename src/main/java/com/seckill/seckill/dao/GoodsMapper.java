@@ -9,4 +9,6 @@ public interface GoodsMapper {
 
     List<SeckillGoodsVo> selectSeckillGoods(int offset, int limit);
 
+    SeckillGoodsVo selectSeckillGoodsById(int id);
+
 }

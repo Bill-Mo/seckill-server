@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品秒杀详情</title>
+    <link rel="stylesheet" th:href="@{/css/detail.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="product-info">
+            <h1 class="product-name" th:text="${goods.name}">商品名称</h1>
+            <div class="product-price">
+                <span class="original-price" th:text="${#numbers.formatDecimal(goods.price, 0, 2)}">原价</span>
+                <span class="seckill-price" th:text="${#numbers.formatDecimal(goods.seckillPrice, 0, 2)}">秒杀价</span>
+            </div>
+            <p class="product-stock" th:text="'秒杀库存: ' + ${goods.seckillStock}">秒杀库存</p>
+            <span class="countdown" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">计算中...</span>
+            <button href="#" class="buy-button" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">立即购买</button>
+        </div>
+        <div class="product-detail" th:text="${goods.description}">
+            <!-- 这里将显示商品详情文字 -->
+        </div>
+    </div>
+</body>
+<script th:src="@{/js/countdown.js}"></script>
+</html>

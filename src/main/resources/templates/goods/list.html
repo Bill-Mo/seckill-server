@@ -2,9 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Hello Page</title>
+    <title>商品秒杀</title>
+    <link rel="stylesheet" th:href="@{/css/list.css}">
 </head>
 <body>
-    <h1 th:text="${user.username}">Default Message</h1>
+    <div class="container">
+        <h1>商品秒杀</h1>
+        <div th:each="goods : ${goodsList}">
+            <a th:href="@{/goods/detail/{id}(id=${goods.id})}">
+                <div class="product">
+                    <div class="product-info">
+                        <span class="product-name" th:text="${goods.name}">商品名称</span>
+                        <span class="product-price" th:text="${#numbers.formatDecimal(goods.price, 0, 2)}">原价</span>
+                        <span class="product-seckill-price" th:text="${#numbers.formatDecimal(goods.seckillPrice, 0, 2)}">秒杀价</span>
+                    </div>
+                    <span class="countdown" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">计算中...</span>
+                </div>
+            </a>
+        </div>
+    </div>
 </body>
+<script th:src="@{/js/countdown.js}"></script>
 </html>

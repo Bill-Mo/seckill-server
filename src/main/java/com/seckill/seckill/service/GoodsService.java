@@ -17,4 +17,8 @@ public class GoodsService {
     public List<SeckillGoodsVo> findSeckillGoods(int offset, int limit) {
         return goodsMapper.selectSeckillGoods(offset, limit); 
     }
+
+    public SeckillGoodsVo findSeckillGoodsById(int id) {
+        return goodsMapper.selectSeckillGoodsById(id);
+    }
 }
