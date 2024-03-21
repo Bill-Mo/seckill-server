@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>商品秒杀详情</title>
-    <link rel="stylesheet" th:href="@{/css/detail.css}">
+    <link rel="stylesheet" th:href="@{/css/goods_detail.css}">
 </head>
 <body>
     <div class="container">
@@ -15,7 +15,7 @@
             </div>
             <p class="product-stock" th:text="'秒杀库存: ' + ${goods.seckillStock}">秒杀库存</p>
             <span class="countdown" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">计算中...</span>
-            <button href="#" class="buy-button" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">立即购买</button>
+            <a th:href="@{/order/seckill/{goodsId}(goodsId=${goods.id})}" class="buy-button" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">立即购买</a>
         </div>
         <div class="product-detail" th:text="${goods.description}">
             <!-- 这里将显示商品详情文字 -->

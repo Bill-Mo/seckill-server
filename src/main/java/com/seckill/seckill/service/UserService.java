@@ -70,4 +70,6 @@ public class UserService {
     public Token findToken(String tokenString) {
         return (Token) redisTemplate.opsForValue().get(RedisUtil.getTokenKey(tokenString));
     }
+
+    
 }

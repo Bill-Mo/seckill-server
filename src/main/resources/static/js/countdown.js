@@ -71,5 +71,6 @@ function updateBuyButton() {
     }
 }
 
-updateBuyButton();
 setInterval(updateCountdown, 1000);
+updateBuyButton();
+// setInterval(updateBuyButton, 1000);

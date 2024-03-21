@@ -11,4 +11,5 @@ public interface GoodsMapper {
 
     SeckillGoodsVo selectSeckillGoodsById(int id);
 
+    int updateSeckillGoodsStock(int goodsId, int stock);
 }

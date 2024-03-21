@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             Method method = handlerMethod.getMethod();
             LoginRequired loginRequired = method.getAnnotation(LoginRequired.class);
             if (loginRequired != null) {
-
+                System.out.println("Login required");
                 String token = SeckillUtil.getValue(request, "token");
                 if (token == null) {
                     response.sendRedirect(request.getContextPath() + "/login");

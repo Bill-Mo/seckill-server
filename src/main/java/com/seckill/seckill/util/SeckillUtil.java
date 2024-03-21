@@ -26,4 +26,18 @@ public class SeckillUtil {
         return null;
     }
 
+    public static void removeValue(HttpServletRequest request, String name) {
+        if (request == null || name == null) {
+            throw new IllegalArgumentException("Empty Argument!"); 
+        }
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    cookie.setMaxAge(0);
+                }
+            }
+        }
+    }
+
 }

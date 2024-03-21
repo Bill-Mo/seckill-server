@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seckill.seckill.dao.OrderMapper">
+
+    <update id="insertOrder" parameterType="com.seckill.seckill.entity.Order">
+        insert into orders (username, goods_id, price, amount, address)
+        values (#{username}, #{goodsId}, #{price}, #{amount}, #{address})
+        ;
+    </update>
+
+    <update id="insertSeckillOrder">
+        insert into seckill_orders (username, order_id)
+        values (#{username}, #{orderId})
+        ;
+    </update>
+
+    <select id="selectOrder">
+        select id
+        from orders
+        where username = #{username}
+        and goods_id = #{goodsId}
+        ;
+    </select>
+</mapper>

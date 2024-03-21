@@ -17,4 +17,11 @@
         and goods.id = #{id}
         ;
     </select>
+
+    <update id="updateSeckillGoodsStock">
+        update seckill_goods
+        set seckill_stock = seckill_stock + #{stock}
+        where goods_id = #{goodsId}
+        ;
+    </update>
 </mapper>

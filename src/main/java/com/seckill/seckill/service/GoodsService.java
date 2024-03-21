@@ -21,4 +21,8 @@ public class GoodsService {
     public SeckillGoodsVo findSeckillGoodsById(int id) {
         return goodsMapper.selectSeckillGoodsById(id);
     }
+
+    public int updateSeckillGoodsStock(int id, int stock) {
+        return goodsMapper.updateSeckillGoodsStock(id, stock);
+    }
 }

@@ -29,6 +29,7 @@ public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
+
     @RequestMapping("/list")
     public String list(Model model) {
         model.addAttribute("goodsList", goodsService.findSeckillGoods(0, 0));
