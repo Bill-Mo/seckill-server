@@ -4,22 +4,16 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seckill.seckill.dao.OrderMapper">
 
-    <update id="insertOrder" parameterType="com.seckill.seckill.entity.Order">
-        insert into orders (username, goods_id, price, amount, address)
-        values (#{username}, #{goodsId}, #{price}, #{amount}, #{address})
+    <update id="insertOrder" parameterType="com.seckill.seckill.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into orders (user_id, total_price, address, is_seckill, create_time)
+        values (#{userId}, #{totalPrice}, #{address}, #{isSeckill}, #{createTime})
         ;
     </update>
 
-    <update id="insertSeckillOrder">
-        insert into seckill_orders (username, order_id)
-        values (#{username}, #{orderId})
-        ;
-    </update>
-
-    <select id="selectOrder">
-        select id
+    <select id="selectOrderById">
+        select *
         from orders
-        where username = #{username}
+        where user_id = #{userId}
         and goods_id = #{goodsId}
         ;
     </select>

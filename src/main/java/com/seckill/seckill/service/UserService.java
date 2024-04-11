@@ -33,11 +33,11 @@ public class UserService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     
-    public RespBean login(String username, String password, int expiredSec, HttpServletResponse response, HttpServletRequest request) {
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+    public RespBean login(String email, String password, int expiredSec, HttpServletResponse response, HttpServletRequest request) {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
-        User user = userMapper.selectByName(username);
+        User user = userMapper.selectByEmail(email);
         if (user == null) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }

@@ -6,7 +6,7 @@ import com.seckill.seckill.entity.User;
 @Mapper
 public interface UserMapper {
     
-    User selectByName(String name);
+    User selectByEmail(String email);
 
     int insertUser(User user);
 

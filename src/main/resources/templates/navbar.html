@@ -1,0 +1,14 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+</head>
+
+<div class="navbar">
+    <a th:href="@{/index}">商品秒杀</a>
+    <div th:if="${loginUser != null}" class="user-area">
+        <a th:href="@{/user/profile}" th:text="${loginUser.username}">用户名</a>
+    </div>
+    <div th:unless="${loginUser != null}" class="user-area">
+        <a th:href="@{/login}">登录</a>
+    </div>
+</div>

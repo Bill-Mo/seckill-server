@@ -7,15 +7,15 @@
         username, password, address create_time
     </sql>
 
-    <select id="selectByName" resultType="com.seckill.seckill.entity.User">
-        select username, password, address, create_time
+    <select id="selectByEmail" resultType="com.seckill.seckill.entity.User">
+        select *
         from user
-        where username = #{name}
+        where email = #{email}
     </select>
 
     <insert id="insertUser" parameterType="com.seckill.seckill.entity.User" keyProperty="id">
-        insert into user (username, password, address, create_time)
-        values (#{username}, #{password}, #{createTime})
+        insert into user (email, password, username, address)
+        values (#{username}, #{password}, #{username}, #{address})
     </insert>
 
     <update id="updatePassword">

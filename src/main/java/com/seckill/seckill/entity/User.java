@@ -10,10 +10,12 @@ import lombok.ToString;
 @Setter
 @ToString
 public class User{
-    private String username;
+    private int id;
+    private String email;
     private String password;
-    private String address;
+    private String username;
     private Date createTime;
+    private String address;
     
 }
 

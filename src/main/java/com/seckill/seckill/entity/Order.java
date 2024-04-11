@@ -13,11 +13,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Order {
     private int id;
-    private String username;
-    private int goodsId;
-    private double price;
-    private int amount;
+    private int userId;
+    private double totalPrice;
     private String address;
+    private int isSeckill;
     private Date paymentTime;
     private Date createTime;
     private int status;

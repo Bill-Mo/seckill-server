@@ -16,7 +16,7 @@ import com.seckill.seckill.util.HostHolder;
 import com.seckill.seckill.util.RedisUtil;
 import com.seckill.seckill.vo.RespBean;
 import com.seckill.seckill.vo.RespBeanEnum;
-import com.seckill.seckill.vo.SeckillGoodsVo;
+import com.seckill.seckill.vo.GoodsVo;
 
 @Service
 public class OrderService {
@@ -38,40 +38,41 @@ public class OrderService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
-    public RespBean doSeckill(int goodsId) {
-
-        // Test if the stock is empty
-        SeckillGoodsVo seckillGoodsVo = goodsService.findSeckillGoodsById(goodsId);
-        System.out.println(seckillGoodsVo.toString());
-        if (seckillGoodsVo.getSeckillStock() <= 0) {
-            return RespBean.error(RespBeanEnum.EMPTY_STOCK);
-        }
-        
-        // Test if the user has already bought the goods
-        if (redisTemplate.opsForSet().isMember(RedisUtil.getSeckillHistoryKey(goodsId), hostHolder.getUser().getUsername()) == true) {
-            return RespBean.error(RespBeanEnum.REPEATE_ERROR);
-        }
-        
+    public RespBean placeOrder(int goodsId, int isSeckill) {
         Order order = new Order();
-        order.setPrice(seckillGoodsVo.getSeckillPrice());
-        order.setUsername(hostHolder.getUser().getUsername());
-        order.setGoodsId(goodsId);
-        order.setAmount(1);
-        order.setAddress(hostHolder.getUser().getAddress());
 
-        goodsService.updateSeckillGoodsStock(goodsId, -1);
-        orderMapper.insertOrder(order);
-        order = orderMapper.selectOrder(hostHolder.getUser().getUsername(), goodsId);
-        log.info("orderId: " + order.getId());
-        orderMapper.insertSeckillOrder(hostHolder.getUser().getUsername(), order.getId());
-        
-        redisTemplate.opsForSet().add(RedisUtil.getSeckillHistoryKey(goodsId), hostHolder.getUser().getUsername());
+        if (isSeckill == 1) {
+            // Test if the stock is empty
+            GoodsVo seckillGoodsVo = goodsService.findGoodsById(goodsId);
+            System.out.println(seckillGoodsVo.toString());
+            if (seckillGoodsVo.getSeckillStock() <= 0) {
+                return RespBean.error(RespBeanEnum.EMPTY_STOCK);
+            }
+            
+            // Test if the user has already bought the goods
+            if (redisTemplate.opsForSet().isMember(RedisUtil.getSeckillHistoryKey(goodsId), hostHolder.getUser().getUsername()) == true) {
+                return RespBean.error(RespBeanEnum.REPEATE_ERROR);
+            }
+            
+            order.setTotalPrice(seckillGoodsVo.getSeckillPrice());
+            order.setUserId(hostHolder.getUser().getId());
+            order.setAddress(hostHolder.getUser().getAddress());
+            order.setCreateTime(new Date());
+            order.setIsSeckill(isSeckill);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("order", order);
-        map.put("goods", seckillGoodsVo);
-        return RespBean.success(map);
+            goodsService.updateSeckillGoodsStock(goodsId, -1);
+            orderMapper.insertOrder(order);
 
+            log.info("orderId: " + order.getId());
+            redisTemplate.opsForSet().add(RedisUtil.getSeckillHistoryKey(goodsId), hostHolder.getUser().getUsername());
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("order", order);
+            map.put("goods", seckillGoodsVo);
+            return RespBean.success(map);
+        } else {
+            return RespBean.error(RespBeanEnum.ERROR);
+        }
     }
 
     // public Order selectOrder(int userId, int goodsId) {

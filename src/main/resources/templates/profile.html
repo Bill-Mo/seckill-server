@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+</head>
+<body>
+<div class="profile-container">
+    <div class="username-section">
+        <h3>用户名: <span th:text="${loginUser.username}"></span></h3>
+    </div>
+    <a th:href="@{/user/orders}" class="order-button">查看我的订单</a>
+</div>
+</body>
+</html>

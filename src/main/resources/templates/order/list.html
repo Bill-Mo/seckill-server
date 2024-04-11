@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link rel="stylesheet" th:href="@{/css/order_list.css}">
+</head>
+<body>
+<div class="orders-container">
+    <h2>已支付订单</h2>
+    <div th:each="order : ${paidOrders}" class="order-card">
+        <h3>订单总价: <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 2)}"></span></h3>
+        <ul class="order-items">
+            <li th:each="item : ${order.items}">
+                <span th:text="${item.name}"></span>
+                <span th:text="${'x ' + item.quantity}"></span>
+                <span th:text="${'$' + #numbers.formatDecimal(item.price, 0, 2)}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <h2>未支付订单</h2>
+    <div th:each="order : ${unpaidOrders}" class="order-card">
+        <h3>订单总价: <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 2)}"></span></h3>
+        <ul class="order-items">
+            <li th:each="item : ${order.items}">
+                <span th:text="${item.name}"></span>
+                <span th:text="${'x ' + item.quantity}"></span>
+                <span th:text="${'$' + #numbers.formatDecimal(item.price, 0, 2)}"></span>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

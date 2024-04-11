@@ -2,23 +2,24 @@ package com.seckill.seckill.vo;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @ToString
-public class SeckillGoodsVo {
+public class GoodsVo {
     private int id;
     private String name;
     private double price;
+    private int stock;
+    private String description;
+    private String image;
     private double seckillPrice;
     private int seckillStock;
-    private String description;
     private Date startTime;
     private Date endTime;
-    private int status;
 }

@@ -9,7 +9,6 @@ public interface OrderMapper {
 
     int insertOrder(Order order);
 
-    int insertSeckillOrder(String username, int orderId);
 
     Order selectOrder(String username, int goodsId);
 }

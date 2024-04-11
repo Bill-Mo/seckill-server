@@ -26,8 +26,8 @@ public class LoginController {
         }
 
         @RequestMapping("/login")
-        public String login(String username, String password, boolean rememberMe, Model model, HttpServletRequest request, HttpServletResponse response) {
-            if (username == null && password == null) {
+        public String login(String email, String password, boolean rememberMe, Model model, HttpServletRequest request, HttpServletResponse response) {
+            if (email == null && password == null) {
                 return "/login";
             }
 
@@ -37,7 +37,7 @@ public class LoginController {
             } else {
                 expiredSec = 3600 * 24 * 30;
             }
-            RespBean respBean = userService.login(username, password, expiredSec, response, request);
+            RespBean respBean = userService.login(email, password, expiredSec, response, request);
 
             System.out.println(respBean.getCode());
             if (respBean.getCode() == 200) {

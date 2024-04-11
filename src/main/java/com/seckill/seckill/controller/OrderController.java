@@ -26,7 +26,7 @@ public class OrderController {
     @RequestMapping("/seckill/{goodsId}")
     public String seckill(Model model, @PathVariable int goodsId) {
 
-        RespBean respBean = orderService.doSeckill(goodsId);
+        RespBean respBean = orderService.placeOrder(goodsId, 1);
 
         if (respBean.getCode() != 200) {
             model.addAttribute("error", respBean.getMessage());

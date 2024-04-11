@@ -40,10 +40,7 @@ public class TokenInterceptor implements HandlerInterceptor {
                         User user = token.getUser();
                         // Save user status
                         hostHolder.setUser(user);
-                    } else {
-                        // Remove token
-                        SeckillUtil.removeValue(request, "token");
-                    }
+                    } 
                 }
                 return true;
     }

@@ -6,6 +6,8 @@
     <link rel="stylesheet" th:href="@{/css/goods_detail.css}">
 </head>
 <body>
+    <div th:replace="navbar.html"></div>
+    
     <div class="container">
         <div class="product-info">
             <h1 class="product-name" th:text="${goods.name}">商品名称</h1>

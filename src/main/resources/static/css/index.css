@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.product-item {
+    width: 250px;
+    margin: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.product-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+}
+
+.product-info {
+    padding: 10px;
+}
+
+.product-name {
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: normal; /* 移除商品名称的加粗样式 */
+}
+
+.product-price {
+    font-size: 20px; /* 增加价格字体大小 */
+    color: #ff6347;
+    font-weight: bold;
+}
+
+
+.product-seckill {
+    margin-top: 5px;
+    background-color: #fff3cd;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-seckill-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #c00;
+    margin-right: 10px;
+}
+
+.product-original-price {
+    font-size: 16px;
+    color: #888;
+    text-decoration: line-through;
+}
+
+.countdown {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.countdown.not-started {
+    color: #888;
+}
+
+.countdown.started {
+    color: #ff6347;
+    font-size: 18px;
+}
+
+.countdown.ended {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.product-stock {
+    display: block;
+    margin-top: 5px;
+    color: #888;
+}
