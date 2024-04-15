@@ -3,23 +3,33 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seckill.seckill.dao.GoodsMapper">
-    <select id="selectGoods" resultType="com.seckill.seckill.vo.GoodsVo">
-        select g.id, name, price, stock, description, image, seckill_price, seckill_stock, start_time, end_time
+
+    <select id="selectGoods" resultType="com.seckill.seckill.entity.Goods">
+        select id, name, price, stock, description, image
         from goods g
-        left join seckill_goods sg
-        on g.id = sg.goods_id
-        and sg.end_time &gt; now()
         limit #{offset}, #{limit}
         ;
     </select>
 
-    <select id="selectGoodsById" resultType="com.seckill.seckill.vo.GoodsVo">
+    <select id="selectSeckillGoods" resultType="com.seckill.seckill.entity.SeckillGoods">
         select g.id, name, price, stock, description, image, seckill_price, seckill_stock, start_time, end_time
         from goods g
-        left join seckill_goods sg
+        join seckill_goods sg
         on g.id = sg.goods_id
-        and sg.start_time &gt; now()
-        where g.id = #{id}
+        where sg.end_time &gt; now()
+        and g.id in 
+        <foreach item="goodsId" collection="goodsIds" open="(" close=")" separator=",">
+            #{goodsId}
+        </foreach>
+        ;
+    </select>
+
+    <select id="selectGoodsById" resultType="com.seckill.seckill.entity.Goods">
+        select g.id, name, price, stock, description, image
+        from goods g
+        where g.id in <foreach item="goodsId" collection="goodsIds">
+            #{goodsId}
+        </foreach>
         ;
     </select>
 

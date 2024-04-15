@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.seckill.seckill.dao.UserMapper;
+import com.seckill.seckill.entity.Cart;
 import com.seckill.seckill.entity.Token;
 import com.seckill.seckill.entity.User;
 import com.seckill.seckill.util.RedisUtil;
@@ -14,6 +16,7 @@ import com.seckill.seckill.vo.RespBean;
 import com.seckill.seckill.vo.RespBeanEnum;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +35,9 @@ public class UserService {
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private CartService cartService;
     
     public RespBean login(String email, String password, int expiredSec, HttpServletResponse response, HttpServletRequest request) {
         if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {

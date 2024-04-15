@@ -2,27 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>商品秒杀详情</title>
+    <title th:text="${goods.name}">商品详情</title>
     <link rel="stylesheet" th:href="@{/css/goods_detail.css}">
 </head>
 <body>
-    <div th:replace="navbar.html"></div>
-    
-    <div class="container">
-        <div class="product-info">
-            <h1 class="product-name" th:text="${goods.name}">商品名称</h1>
-            <div class="product-price">
-                <span class="original-price" th:text="${#numbers.formatDecimal(goods.price, 0, 2)}">原价</span>
-                <span class="seckill-price" th:text="${#numbers.formatDecimal(goods.seckillPrice, 0, 2)}">秒杀价</span>
-            </div>
-            <p class="product-stock" th:text="'秒杀库存: ' + ${goods.seckillStock}">秒杀库存</p>
-            <span class="countdown" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">计算中...</span>
-            <a th:href="@{/order/seckill/{goodsId}(goodsId=${goods.id})}" class="buy-button" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">立即购买</a>
+    <div class="product-details">
+        <div class="product-image">
+            <img th:src="@{/image/iphone.jfif}" alt="Product Image">
         </div>
-        <div class="product-detail" th:text="${goods.description}">
-            <!-- 这里将显示商品详情文字 -->
+        <div class="product-info">
+            <h2 th:text="${goods.name}">商品名称</h2>
+            <p th:text="'价格: ¥' + ${goods.price}">商品价格</p>
+            <div class="quantity">
+                <label for="quantity">数量:</label>
+                <input type="number" id="quantity" min="1" th:max="${goods.stock}" value="1">
+                <span th:text="'库存: ' + ${goods.stock}">库存数量</span>
+            </div>
+            <div class="buttons">
+                <a class="add-to-cart" th:href="@{/cart/add/${goods.id}}">加入购物车</a>
+                <a class="buy-now">立即购买</a>
+            </div>
         </div>
     </div>
+    <div class="product-description">
+        <h3>商品详情</h3>
+        <p th:text="${goods.description}">商品详情描述</p>
+    </div>
 </body>
-<script th:src="@{/js/countdown.js}"></script>
 </html>

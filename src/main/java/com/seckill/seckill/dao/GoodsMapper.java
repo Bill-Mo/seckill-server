@@ -4,15 +4,20 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.seckill.seckill.vo.GoodsVo;
+import com.seckill.seckill.entity.Goods;
+import com.seckill.seckill.entity.SeckillGoods;
 @Mapper
 public interface GoodsMapper {
 
-    List<GoodsVo> selectGoods(int offset, int limit);
+    List<Goods> selectGoods(int offset, int limit);
 
-    GoodsVo selectGoodsById(int id);
+    List<SeckillGoods> selectSeckillGoods(List<Integer> goodsIds);
+
+    List<Goods> selectGoodsById(List<Integer> goodsIds);
 
     int selectGoodsRows();
+
+    List<Goods> selectGoodsByCart(int userId);
 
     int updateSeckillGoodsStock(int goodsId, int stock);
 }

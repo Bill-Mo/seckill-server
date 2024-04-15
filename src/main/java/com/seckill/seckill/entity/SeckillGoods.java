@@ -1,4 +1,4 @@
-package com.seckill.seckill.vo;
+package com.seckill.seckill.entity;
 
 import java.util.Date;
 
@@ -11,13 +11,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class GoodsVo {
-    private int id;
-    private String name;
-    private double price;
-    private int stock;
-    private String description;
-    private String image;
+public class SeckillGoods extends Goods{
     private double seckillPrice;
     private int seckillStock;
     private Date startTime;

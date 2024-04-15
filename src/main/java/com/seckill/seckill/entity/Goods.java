@@ -1,11 +1,14 @@
 package com.seckill.seckill.entity;
 
-import lombok.AllArgsConstructor;
+import java.util.Date;
+
+import javafx.beans.binding.BooleanExpression;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @ToString
@@ -13,5 +16,8 @@ public class Goods {
     private int id;
     private String name;
     private double price;
-    private int amount;
+    private int stock;
+    private String description;
+    private String image;
+    private boolean seckill = false;
 }

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.seckill.seckill.annotation.LoginRequired;
+import com.seckill.seckill.entity.Goods;
 import com.seckill.seckill.entity.Token;
 import com.seckill.seckill.entity.User;
 import com.seckill.seckill.service.GoodsService;
 import com.seckill.seckill.util.HostHolder;
 import com.seckill.seckill.util.RedisUtil;
-import com.seckill.seckill.vo.GoodsVo;
 
 import java.util.List;
 @Controller
@@ -27,10 +27,11 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") int id) {
         model.addAttribute("goods", goodsService.findGoodsById(id));
         return "goods/detail";
     }
+
+
 }

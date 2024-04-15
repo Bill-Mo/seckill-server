@@ -20,7 +20,7 @@ body {
     justify-content: center;
 }
 
-.product-item {
+.product-item, .seckill-product-item {
     width: 250px;
     margin: 10px;
     background-color: #f5f5f5;
@@ -52,7 +52,11 @@ body {
 .product-name {
     font-size: 18px;
     margin-bottom: 5px;
-    font-weight: normal; /* 移除商品名称的加粗样式 */
+    font-weight: normal;
+    white-space: nowrap; /* 防止文本换行 */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    text-overflow: ellipsis; /* 显示省略号 */
+    max-width: 200px; /* 设置最大宽度 */
 }
 
 .product-price {

@@ -10,21 +10,31 @@
     <div class="container">
         <h1>商品秒杀</h1>
         <div class="product-container">
-            <div th:each="goods, stat : ${goodsList}" class="product-item">
+            <div th:each="goods: ${seckillGoodsList}" class="seckill-product-item">
                 <a th:href="@{/goods/detail/{id}(id=${goods.id})}" class="product-link">
                     <div class="product">
                         <img th:src="@{/image/iphone.jfif}" alt="Product Image" class="product-image">
                         <div class="product-info">
                             <h3 class="product-name" th:text="${goods.name}">商品名称</h3>
-                            <div th:if="${goods.endTime != null}" class="product-seckill">
+                            <div class="product-seckill">
                                 <span class="product-seckill-price" th:text="${'$' + #numbers.formatDecimal(goods.seckillPrice, 0, 2)}">秒杀价</span>
                                 <span class="product-original-price" th:text="${'$' + #numbers.formatDecimal(goods.price, 0, 2)}">原价</span>
                                 <div class="countdown" th:data-start-time="${goods.startTime}" th:data-end-time="${goods.endTime}">计算中...</div>
                             </div>
-                            <div th:unless="${goods.endTime != null}">
-                                <span class="product-price" th:text="${'$' + #numbers.formatDecimal(goods.price, 0, 2)}">原价</span>
-                            </div>
-                            <span class="product-stock" th:text="${(goods.endTime == null ? goods.stock : goods.seckillStock) + ' left'}">剩余数量</span>
+                            <span class="product-stock" th:text="${(goods.seckillStock) + ' left'}">剩余数量</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div th:each="goods: ${goodsList}" th:if="${goods.seckill == false}" class="product-item">
+                <a th:href="@{/goods/detail/{id}(id=${goods.id})}" class="product-link">
+                    <div th:if="${goods.seckill == false}" class="product">
+                        <img th:src="@{/image/iphone.jfif}" alt="Product Image" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-name" th:text="${goods.name}">商品名称</h3>
+                            <span class="product-price" th:text="${'$' + #numbers.formatDecimal(goods.price, 0, 2)}">原价</span>
+                            <span class="product-stock" th:text="${(goods.stock) + ' left'}">剩余数量</span>
                         </div>
                     </div>
                 </a>

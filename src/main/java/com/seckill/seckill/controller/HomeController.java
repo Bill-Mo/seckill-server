@@ -8,9 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.seckill.seckill.entity.Goods;
 import com.seckill.seckill.entity.Page;
+import com.seckill.seckill.entity.SeckillGoods;
 import com.seckill.seckill.service.GoodsService;
-import com.seckill.seckill.vo.GoodsVo;
 
 @Controller
 public class HomeController {
@@ -23,10 +24,27 @@ public class HomeController {
         page.setRows(goodsService.findGoodsRows());
         page.setPath("/index");
 
-        List<GoodsVo> goodsList = goodsService.findGoods(page.getOffset(), page.getLimit());
-        System.out.println(goodsList);
+        List<Goods> goodsList = goodsService.findGoods(page.getOffset(), page.getLimit());
+
+        List<Integer> goodsIds = new ArrayList<>();
+        for (Goods goods : goodsList) {
+            goodsIds.add(goods.getId());
+        }
+        List<SeckillGoods> seckillGoodsList = goodsService.findSeckillGoods(goodsIds);
+
+        for (int i = 0; i < goodsList.size(); i++) {
+            for (int j = 0; j < seckillGoodsList.size(); j++) {
+                if (goodsList.get(i).getId() == seckillGoodsList.get(j).getId()) {
+                    goodsList.get(i).setSeckill(true);
+                }
+            }
+        }
+
+        System.out.println("goodsList: " + goodsList.size());
+        System.out.println("seckillGoodsList: " + seckillGoodsList.size());
 
         model.addAttribute("goodsList", goodsList);
+        model.addAttribute("seckillGoodsList", seckillGoodsList);
         return "index";
     }
 }
