@@ -27,7 +27,8 @@
     <select id="selectGoodsById" resultType="com.seckill.seckill.entity.Goods">
         select g.id, name, price, stock, description, image
         from goods g
-        where g.id in <foreach item="goodsId" collection="goodsIds">
+        where g.id in 
+        <foreach item="goodsId" collection="goodsIds" open="(" close=")" separator=",">
             #{goodsId}
         </foreach>
         ;

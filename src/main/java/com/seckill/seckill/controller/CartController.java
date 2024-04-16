@@ -9,13 +9,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.seckill.seckill.annotation.LoginRequired;
-import com.seckill.seckill.entity.Cart;
+import com.seckill.seckill.entity.CartGoods;
 import com.seckill.seckill.entity.User;
 import com.seckill.seckill.service.CartService;
 import com.seckill.seckill.service.GoodsService;
 import com.seckill.seckill.util.HostHolder;
+
 
 @Controller
 @RequestMapping("/cart")
@@ -30,21 +32,27 @@ public class CartController {
     @Autowired
     GoodsService goodsService;
 
-    @RequestMapping("/add/{id}")
+    @RequestMapping("/add")
     @LoginRequired
-    public String addToCart(@PathVariable("id") int goodsId, @CookieValue("amount") int amount){
+    public String addToCart(@RequestParam("id") int goodsId, @RequestParam("amount") int amount){
         User user = hostHolder.getUser();
         cartService.addToCart(goodsId, amount, user.getId());
-        return "redirect:/cart";
+        return "redirect:/cart/detail";
     }
 
     @RequestMapping("/detail")
     @LoginRequired
     public String detail(Model model) {
-        List<Cart> cartList = cartService.getCart(hostHolder.getUser().getId());
-        List<Integer> goodsIdList = cartList.stream().map(Cart::getGoodsId).collect(Collectors.toList());
+        List<CartGoods> cart = cartService.getCart(hostHolder.getUser().getId());
         
-        model.addAttribute("cartList", cartList);
+        model.addAttribute("cart", cart);
         return "/cart";
+    }
+
+    @RequestMapping("/delete/{id}")
+    @LoginRequired
+    public String delete(@PathVariable("id") int goodsId) {
+        cartService.deleteFromCart(goodsId, hostHolder.getUser().getId());
+        return "redirect:/cart/detail";
     }
 }

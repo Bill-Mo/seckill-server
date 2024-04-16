@@ -3,8 +3,8 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seckill.seckill.dao.CartMapper">
-    <select id="selectCart" resultType="com.seckill.seckill.entity.Cart">
-        select c.id, user_id, goods_id, amount, create_time, status
+    <select id="selectCartGoods" resultType="com.seckill.seckill.entity.CartGoods">
+        select g.id, name, price, stock, description, image, user_id, amount, c.create_time, status
         from goods g
         join cart c
         on g.id = c.goods_id
@@ -12,17 +12,24 @@
         ;
     </select>
 
-    <select id="updateCart">
+    <update id="updateCart">
         update cart
         set amount = amount + #{amount}
         where user_id = #{userId}
         and goods_id = #{goodsId}
         ;
-    </select>
+    </update>
 
-    <update id="insertCart">
+    <update id="insertCartGoods">
         insert into cart (user_id, goods_id, amount, create_time, status)
         values (#{userId}, #{goodsId}, #{amount}, now(), 0)
+        ;
+    </update>
+
+    <update id="deleteCartGoods">
+        delete from cart
+        where user_id = #{userId}
+        and goods_id = #{goodsId}
         ;
     </update>
 </mapper>

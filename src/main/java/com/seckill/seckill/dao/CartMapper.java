@@ -4,15 +4,16 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.seckill.seckill.entity.Cart;
+import com.seckill.seckill.entity.CartGoods;
 
 @Mapper
 public interface CartMapper {
 
-    List<Cart> selectCart(int userId);
+    List<CartGoods> selectCartGoods(int userId);
 
     int updateCart(int userId, int goodsId, int amount);
 
-    int insertCart(int userId, int goodsId, int amount);
+    int insertCartGoods(int userId, int goodsId, int amount);
 
+    int deleteCartGoods(int userId, int goodsId);
 }

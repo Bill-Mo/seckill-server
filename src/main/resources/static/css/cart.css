@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* 确保body至少占据整个视口高度 */
+    position: relative; /* 设置相对定位,用于正确定位底部栏 */
+    padding-bottom: 60px; /* 底部栏高度,根据需要调整 */
+    box-sizing: border-box; /* 确保padding不影响body高度 */
+}
+
+.cart-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cart-header {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.select-all,
+.header-item {
+    flex: 1;
+    text-align: center;
+}
+
+.cart-items {
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.item-select,
+.item-image,
+.item-name,
+.item-price,
+.item-amount,
+.item-total,
+.item-remove {
+    flex: 1;
+    text-align: center;
+}
+
+.item-image img {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.cart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+    position: fixed; /* 将底部栏固定在底部 */
+    bottom: 0; /* 将底部栏置于底部 */
+    left: 0; /* 将底部栏左侧对齐页面左侧 */
+    right: 0; /* 将底部栏右侧对齐页面右侧 */
+}
+
+.footer-left,
+.footer-middle,
+.footer-right {
+    flex: 1;
+    text-align: center;
+}
+
+.footer-right button {
+    margin-left: 10px;
+}

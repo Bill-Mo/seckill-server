@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.seckill.seckill.dao.UserMapper;
-import com.seckill.seckill.entity.Cart;
 import com.seckill.seckill.entity.Token;
 import com.seckill.seckill.entity.User;
 import com.seckill.seckill.util.RedisUtil;
@@ -43,6 +42,7 @@ public class UserService {
         if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
+        
         User user = userMapper.selectByEmail(email);
         if (user == null) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);

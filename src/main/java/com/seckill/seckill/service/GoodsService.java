@@ -25,10 +25,10 @@ public class GoodsService {
         return goodsMapper.selectSeckillGoods(goodsIds);
     }
 
-    public List<Goods> findGoodsById(int goodsId) {
+    public Goods findGoodsById(int goodsId) {
         List<Integer> goodsIds = new ArrayList<>();
         goodsIds.add(goodsId);
-        return goodsMapper.selectGoodsById(goodsIds);
+        return goodsMapper.selectGoodsById(goodsIds).get(0);
     }
 
     public List<Goods> findGoodsById(List<Integer> goodsIds) {

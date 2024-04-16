@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车详情</title>
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <div class="cart-container">
+        <div class="cart-header">
+            <div class="select-all">
+                <input type="checkbox" id="selectAll">
+                <label for="selectAll">全选</label>
+            </div>
+            <div class="header-item">商品名称</div>
+            <div class="header-item">单价</div>
+            <div class="header-item">数量</div>
+            <div class="header-item">金额</div>
+            <div class="header-item">操作</div>
+        </div>
+        <div class="cart-items">
+            <div th:each="item, iterStat : ${cart}">
+                <div class="cart-item" th:data-goods-id="${item.id}">
+                    <div class="item-select">
+                        <input type="checkbox" th:id="'item-' + ${iterStat.index}">
+                    </div>
+                    <div class="item-image">
+                        <img th:src="@{/image/iphone.jfif}" alt="商品图片">
+                    </div>
+                    <div class="item-name" th:text="${item.name}">商品名称</div>
+                    <div class="item-price" th:text="${'$' + item.price}">$99.99</div>
+                    <div class="item-amount">
+                        <input type="number" th:value="${item.amount}" min="1">
+                    </div>
+                    <div class="item-total" th:text="${'$' + item.price * item.amount}">$99.99</div>
+                    <div class="item-remove">
+                        <button class="remove-button">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="footer-left">
+                <input type="checkbox" id="selectAllFooter">
+                <label for="selectAllFooter">全选</label>
+                <button>删除选中项</button>
+            </div>
+            <div class="footer-middle">
+                已选择 <span id="selectedCount">0</span> 件商品
+            </div>
+            <div class="footer-right">
+                总价格: <span id="totalPrice">$0.00</span>
+                <button>结算</button>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/cart.js}"></script>
+</body>
+</html>

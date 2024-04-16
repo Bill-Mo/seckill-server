@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seckill.seckill.dao.CartMapper;
-import com.seckill.seckill.entity.Cart;
+import com.seckill.seckill.entity.CartGoods;
 
 @Service
 public class CartService {
@@ -15,17 +15,21 @@ public class CartService {
     private CartMapper cartMapper;
     
     public void addToCart(int goodsId, int amount, int userId) {
-        List<Cart> getCart = getCart(userId);
-        for (Cart cart : getCart) {
-            if (cart.getGoodsId() == goodsId) {
+        List<CartGoods> cart = getCart(userId);
+        for (CartGoods goods : cart) {
+            if (goods.getId() == goodsId) {
                 cartMapper.updateCart(userId, goodsId, amount);
                 return;
             }
         }
-        cartMapper.insertCart(userId, goodsId, amount);
+        cartMapper.insertCartGoods(userId, goodsId, amount);
     }
 
-    public List<Cart> getCart(int userId) {
-        return cartMapper.selectCart(userId);
+    public List<CartGoods> getCart(int userId) {
+        return cartMapper.selectCartGoods(userId);
+    }
+
+    public void deleteFromCart(int goodsId, int userId) {
+        cartMapper.deleteCartGoods(userId, goodsId);
     }
 }

@@ -11,10 +11,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Cart{
-    private int id;
+public class CartGoods extends Goods{
     private int userId;
-    private int goodsId;
     private int amount;
     private Date createTime;
     private int status;
