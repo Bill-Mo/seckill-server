@@ -13,7 +13,7 @@
                 <input type="checkbox" id="selectAll">
                 <label for="selectAll">全选</label>
             </div>
-            <div class="header-item">商品名称</div>
+            <div class="header-item-info">商品名称</div>
             <div class="header-item">单价</div>
             <div class="header-item">数量</div>
             <div class="header-item">金额</div>
@@ -25,13 +25,17 @@
                     <div class="item-select">
                         <input type="checkbox" th:id="'item-' + ${iterStat.index}">
                     </div>
-                    <div class="item-image">
-                        <img th:src="@{/image/iphone.jfif}" alt="商品图片">
+                    <div class="item-info">
+                        <img class="item-image" th:src="@{/image/iphone.jfif}" alt="商品图片">
+                        <div class="item-name" th:text="${item.name}">商品名称</div>
                     </div>
-                    <div class="item-name" th:text="${item.name}">商品名称</div>
                     <div class="item-price" th:text="${'$' + item.price}">$99.99</div>
                     <div class="item-amount">
-                        <input type="number" th:value="${item.amount}" min="1">
+                        <div class="amount-control">
+                            <button class="amount-btn decrease">-</button>
+                            <input type="number" th:value="${item.amount}" min="1" class="amount-input" th:data-original-amount="${item.amount}">
+                            <button class="amount-btn increase">+</button>
+                        </div>
                     </div>
                     <div class="item-total" th:text="${'$' + item.price * item.amount}">$99.99</div>
                     <div class="item-remove">
@@ -51,7 +55,7 @@
             </div>
             <div class="footer-right">
                 总价格: <span id="totalPrice">$0.00</span>
-                <button>结算</button>
+                <button id="checkout-btn">结算</button>
             </div>
         </div>
     </div>

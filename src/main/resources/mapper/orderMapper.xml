@@ -5,16 +5,41 @@
 <mapper namespace="com.seckill.seckill.dao.OrderMapper">
 
     <update id="insertOrder" parameterType="com.seckill.seckill.entity.Order" useGeneratedKeys="true" keyProperty="id">
-        insert into orders (user_id, total_price, address, is_seckill, create_time)
-        values (#{userId}, #{totalPrice}, #{address}, #{isSeckill}, #{createTime})
+        insert into orders (user_id, total_price, address, create_time)
+        values (#{userId}, #{totalPrice}, #{address}, now())
         ;
     </update>
 
-    <select id="selectOrderById">
-        select *
+    <update id="insertOrderGoods">
+        insert into order_goods (order_id, goods_id, amount, price)
+        values
+        (#{orderId}, #{goodsId}, #{amount}, #{price})
+        ;
+    </update>
+
+    <select id="selectOrderGoods">
+        select g.id, name, g.price, stock, description, image, og.id, amount, og.price
+        from goods g
+        join order_goods og
+        on g.id = og.goods_id
+        where og.order_id = #{orderId}
+        ;
+    </select>
+
+    <select id="selectOrders">
+        select id, user_id, total_price, address, payment_time, create_time, status, payment_method
         from orders
         where user_id = #{userId}
-        and goods_id = #{goodsId}
+        order by create_time desc
+        limit #{offset}, #{limit}
+        ;
+    </select>
+
+    <select id="selectOrderById">
+        select id, user_id, total_price, address, payment_time, create_time, status, payment_method
+        from orders
+        where user_id = #{userId}
+        and id = #{orderId}
         ;
     </select>
 </mapper>

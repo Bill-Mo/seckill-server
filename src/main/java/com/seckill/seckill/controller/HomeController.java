@@ -40,9 +40,6 @@ public class HomeController {
             }
         }
 
-        System.out.println("goodsList: " + goodsList.size());
-        System.out.println("seckillGoodsList: " + seckillGoodsList.size());
-
         model.addAttribute("goodsList", goodsList);
         model.addAttribute("seckillGoodsList", seckillGoodsList);
         return "index";

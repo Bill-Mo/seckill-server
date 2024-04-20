@@ -19,5 +19,7 @@ public interface GoodsMapper {
 
     List<Goods> selectGoodsByCart(int userId);
 
+    int updateGoodsStock(int goodsId, int stock);
+
     int updateSeckillGoodsStock(int goodsId, int stock);
 }

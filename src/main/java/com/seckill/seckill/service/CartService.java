@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.seckill.seckill.dao.CartMapper;
 import com.seckill.seckill.entity.CartGoods;
+import com.seckill.seckill.vo.RespBean;
+import com.seckill.seckill.vo.RespBeanEnum;
 
 @Service
 public class CartService {
@@ -18,7 +20,7 @@ public class CartService {
         List<CartGoods> cart = getCart(userId);
         for (CartGoods goods : cart) {
             if (goods.getId() == goodsId) {
-                cartMapper.updateCart(userId, goodsId, amount);
+                updateCartGoodsAmount(userId, goodsId, amount);
                 return;
             }
         }
@@ -31,5 +33,18 @@ public class CartService {
 
     public void deleteFromCart(int goodsId, int userId) {
         cartMapper.deleteCartGoods(userId, goodsId);
+    }
+
+    public void updateCartGoodsAmount(int goodsId, int amount, int userId) {
+        cartMapper.updateCartGoodsAmount(userId, goodsId, amount);
+    }
+
+    public RespBean changeCartGoodsStatus(int userId, int goodsId) {
+        int result = cartMapper.updateCartGoodsStatus(userId, goodsId);
+        if (result == 1) {
+            return RespBean.success();
+        } else {
+            return RespBean.error(RespBeanEnum.CART_ERROR);
+        }
     }
 }

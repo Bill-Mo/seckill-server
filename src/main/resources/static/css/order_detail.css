@@ -1,58 +1,124 @@
-/* order-details.css */
-.order-details {
-    display: flex;
-    flex-wrap: wrap;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
 }
 
-.order-summary {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+h2 {
+    color: #333;
+}
+
+.address-section {
+    border: 1px solid #ccc;
+    padding: 10px;
     margin-bottom: 20px;
 }
 
-.shipping-address,
-.payment-info,
-.total-amount {
-    flex: 1;
+.payment-section {
+    border: 1px solid #ccc;
     padding: 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
+    margin-bottom: 20px;
 }
 
-.order-items {
-    width: 100%;
+.goods-confirm {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
 }
 
-.order-items h2 {
-    margin-bottom: 10px;
+.goods-header {
+    display: flex;
+    text-align: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
 }
 
-.item {
+.header-item,
+.header-item-info {
+    flex: 1;
+    text-align: center;
+}
+
+.header-item-info {
+    min-width: 350px;
+}
+
+.goods-list {
+    padding: 10px;
+}
+
+.order-goods {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
     padding: 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ccc;
+
 }
 
-.item-image {
-    width: 80px;
-    height: 80px;
-    margin-right: 10px;
+.item-info,
+.item-price,
+.item-amount,
+.item-total-price,
+span {
+    flex: 1;
+    text-align: center;
 }
 
-.item-image img {
-    max-width: 100%;
-    max-height: 100%;
+.item-info {
+    min-width: 350px;
+    display: flex;
+    align-items: center;
 }
 
-.item-details h4 {
-    margin-top: 0;
+.item-info img {
+    max-width: 70px;
+    max-height: 70px;
 }
 
-.quantity,
-.price {
-    font-weight: bold;
+.goods-list .item-name {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+
+.order-total {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #555;
 }

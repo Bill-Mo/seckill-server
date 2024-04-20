@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.seckill.seckill.dao.GoodsMapper;
 import com.seckill.seckill.entity.Goods;
 import com.seckill.seckill.entity.SeckillGoods;
+import com.seckill.seckill.vo.RespBean;
+import com.seckill.seckill.vo.RespBeanEnum;
 
 @Service
 public class GoodsService {
@@ -37,6 +39,20 @@ public class GoodsService {
 
     public int findGoodsRows() {
         return goodsMapper.selectGoodsRows();
+    }
+
+    public RespBean updateGoodsStock(int goodsId, int stock) {
+        Goods goods = findGoodsById(goodsId);
+        if (goods == null || goods.getStock() + stock < 0) {
+            return RespBean.error(RespBeanEnum.EMPTY_STOCK);
+        }
+
+        int result = goodsMapper.updateGoodsStock(goodsId, stock);
+        if (result == 1) {
+            return RespBean.success();
+        } else {
+            return RespBean.error(RespBeanEnum.ORDER_FAIL);
+        }
     }
 
     public int updateSeckillGoodsStock(int id, int stock) {

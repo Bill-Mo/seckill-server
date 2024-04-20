@@ -16,6 +16,8 @@ public enum RespBeanEnum {
 
     EMPTY_STOCK(502, "Out of stock"),
     REPEATE_ERROR(503, "You have already bought this item"),
+    ORDER_FAIL(504, "Order failed"),
+    CART_ERROR(505, "Cart error"),
     ;
 
     private final Integer code;

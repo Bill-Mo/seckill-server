@@ -2,43 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Order Details</title>
+    <title>订单确认</title>
     <link rel="stylesheet" th:href="@{/css/order_detail.css}">
 </head>
 <body>
-    <div class="order-details">
-        <div class="order-summary">
-            <div class="shipping-address">
-                <h3>Shipping Address</h3>
-                <p th:text="${order.shippingAddress}">123 Main St, Anytown USA</p>
-            </div>
-            <div class="payment-info">
-                <h3>Payment Method</h3>
-                <p th:text="${order.paymentMethod}">Visa ****1234</p>
-                <h3>Order Time</h3>
-                <p th:text="${#dates.format(order.orderTime, 'yyyy-MM-dd HH:mm:ss')}">2023-04-07 10:30:00</p>
-            </div>
-            <div class="total-amount">
-                <h3>Total Amount</h3>
-                <p th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 2, 'POINT')}">$99.99</p>
-            </div>
-        </div>
-
-        <div class="order-items">
-            <h2>Order Items</h2>
-            <ul>
-                <li class="item" th:each="item : ${order.items}">
-                    <div class="item-image">
-                        <img th:src="@{${item.product.imageUrl}}" alt="Product Image">
-                    </div>
-                    <div class="item-details">
-                        <h4 th:text="${item.product.name}">Product Name</h4>
-                        <p>Quantity: <span class="quantity" th:text="${item.quantity}">1</span></p>
-                        <p>Price: <span class="price" th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')}">$19.99</span></p>
-                    </div>
-                </li>
-            </ul>
+<div class="container">
+    <h2>确认收货地址</h2>
+    <div class="address-section">
+        <p th:text="${order.address}"></p>
+        <button id="changeAddressBtn">修改地址</button>
+    </div>
+    <div class="payment-section">
+        <h2>确认支付方式</h2>
+        <div class="paymentMethod">
+            <select>
+                <option value="credit_card">信用卡</option>
+                <option value="paypal">PayPal</option>
+                <option value="wechat_pay">微信支付</option>
+                <option value="alipay">支付宝</option>
+            </select>
         </div>
     </div>
+    <div class="goods-confirm">
+        <h2>确认商品</h2>
+        <div class="goods-header">
+            <div class="header-item-info">商品名称</div>
+            <div class="header-item">单价</div>
+            <div class="header-item">数量</div>
+            <div class="header-item">金额</div>
+        </div>
+        <div class="goods-list">
+            <div th:each="goods : ${orderGoodsList}">
+                <div class="order-goods">
+                    <div class="item-info">
+                        <img th:src="@{/image/iphone.jfif}" alt="商品图片">
+                        <span class="item-name" th:text="${goods.name}"></span>
+                    </div>
+                    <span class="item-price" th:text="${'$' + goods.price}"></span>
+                    <span class="item-amount" th:text="${goods.amount}"></span>
+                    <span class="item-total-price" th:text="${'$' + goods.price * goods.amount}"></span>
+                </div>
+            </div>
+    </div>
+
+    </div>
+    <div class="order-total">
+        <p>总金额: <span th:text="${order.totalPrice}"></span></p>
+        <p>收货地址: <span th:text="${order.address}"></span></p>
+        <button id="submitOrderBtn">提交订单</button>
+    </div>
+</div>
+<script th:src="@{placeOrder.js}"></script>
 </body>
 </html>

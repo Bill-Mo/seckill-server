@@ -12,7 +12,7 @@
         ;
     </select>
 
-    <update id="updateCart">
+    <update id="updateCartGoodsAmount">
         update cart
         set amount = amount + #{amount}
         where user_id = #{userId}
@@ -31,5 +31,15 @@
         where user_id = #{userId}
         and goods_id = #{goodsId}
         ;
+    </update>
+
+    <update id="updateCartGoodsStatus">
+        update cart
+        set status = 1
+            <!-- WHEN status = 0 THEN 1
+            WHEN status = 1 THEN 0
+        END -->
+        where user_id = #{userId}
+        and goods_id = #{goodsId}
     </update>
 </mapper>

@@ -11,9 +11,11 @@ public interface CartMapper {
 
     List<CartGoods> selectCartGoods(int userId);
 
-    int updateCart(int userId, int goodsId, int amount);
+    int updateCartGoodsAmount(int userId, int goodsId, int amount);
 
     int insertCartGoods(int userId, int goodsId, int amount);
 
     int deleteCartGoods(int userId, int goodsId);
+
+    int updateCartGoodsStatus(int userId, int goodsId);
 }

@@ -1,5 +1,7 @@
 package com.seckill.seckill.vo;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,81 +1,84 @@
-// package com.seckill.seckill.service;
+package com.seckill.seckill.service;
 
-// import java.util.Date;
-// import java.util.HashMap;
-// import java.util.Map;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-// import org.slf4j.Logger;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.data.redis.core.RedisTemplate;
-// import org.springframework.stereotype.Service;
-// import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-// import com.seckill.seckill.dao.OrderMapper;
-// import com.seckill.seckill.entity.Goods;
-// import com.seckill.seckill.entity.Order;
-// import com.seckill.seckill.util.HostHolder;
-// import com.seckill.seckill.util.RedisUtil;
-// import com.seckill.seckill.vo.RespBean;
-// import com.seckill.seckill.vo.RespBeanEnum;
+import com.seckill.seckill.dao.OrderMapper;
+import com.seckill.seckill.entity.CartGoods;
+import com.seckill.seckill.entity.Goods;
+import com.seckill.seckill.entity.Order;
+import com.seckill.seckill.entity.OrderGoods;
+import com.seckill.seckill.util.HostHolder;
+import com.seckill.seckill.util.RedisUtil;
+import com.seckill.seckill.vo.RespBean;
+import com.seckill.seckill.vo.RespBeanEnum;
 
-// @Service
-// public class OrderService {
+@Service
+public class OrderService {
 
-//     // logger
-//     @Autowired
-//     private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderService.class);
+    // logger
+    @Autowired
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderService.class);
 
-//     @Autowired
-//     private OrderMapper orderMapper;
+    @Autowired
+    private OrderMapper orderMapper;
 
-//     @Autowired
-//     private HostHolder hostHolder;
+    @Autowired
+    CartService cartService;
+    @Autowired
+    private GoodsService goodsService;
 
-//     @Autowired
-//     private GoodsService goodsService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
-//     @Autowired
-//     private RedisTemplate<String, Object> redisTemplate;
+    @Transactional
+    public RespBean checkout(int userId, String address, List<CartGoods> cart) {
+        Order order = new Order();
 
-//     @Transactional
-//     public RespBean placeOrder(int goodsId, int isSeckill) {
-//         Order order = new Order();
+        // Compute total price
+        int totalPrice = 0;
+        for (CartGoods cartGoods : cart) {
+            if (cartGoods.getStatus() == 1) {
+                totalPrice += cartGoods.getPrice() * cartGoods.getAmount();
+            }
+        }
 
-//         if (isSeckill == 1) {
-//             // Test if the stock is empty
-//             Goods seckillGoodsVo = goodsService.findGoodsById(goodsId);
-//             System.out.println(seckillGoodsVo.toString());
-//             if (seckillGoodsVo.getSeckillStock() <= 0) {
-//                 return RespBean.error(RespBeanEnum.EMPTY_STOCK);
-//             }
-            
-//             // Test if the user has already bought the goods
-//             if (redisTemplate.opsForSet().isMember(RedisUtil.getSeckillHistoryKey(goodsId), hostHolder.getUser().getUsername()) == true) {
-//                 return RespBean.error(RespBeanEnum.REPEATE_ERROR);
-//             }
-            
-//             order.setTotalPrice(seckillGoodsVo.getSeckillPrice());
-//             order.setUserId(hostHolder.getUser().getId());
-//             order.setAddress(hostHolder.getUser().getAddress());
-//             order.setCreateTime(new Date());
-//             order.setIsSeckill(isSeckill);
+        // Set and insert order
+        order.setUserId(userId);
+        order.setTotalPrice(totalPrice);
+        order.setAddress(address);
+        order.setCreateTime(new Date());
+        orderMapper.insertOrder(order);
 
-//             goodsService.updateSeckillGoodsStock(goodsId, -1);
-//             orderMapper.insertOrder(order);
+        for (CartGoods cartGoods : cart) {
+            if (cartGoods.getStatus() == 1) {
 
-//             log.info("orderId: " + order.getId());
-//             redisTemplate.opsForSet().add(RedisUtil.getSeckillHistoryKey(goodsId), hostHolder.getUser().getUsername());
+                // Add goods into order, update goods stock, and remove goods from cart, 
+                int result = orderMapper.insertOrderGoods(order.getId(), cartGoods.getId(), cartGoods.getAmount(), cartGoods.getPrice());
+                RespBean reduceStock = goodsService.updateGoodsStock(userId, -cartGoods.getAmount());
+                if (result != 1 || reduceStock.getCode() != 200) {
+                    return RespBean.error(RespBeanEnum.ORDER_FAIL);
+                }
+                cartService.deleteFromCart(cartGoods.getId(), userId);
+            }
+        }
 
-//             Map<String, Object> map = new HashMap<>();
-//             map.put("order", order);
-//             map.put("goods", seckillGoodsVo);
-//             return RespBean.success(map);
-//         } else {
-//             return RespBean.error(RespBeanEnum.ERROR);
-//         }
-//     }
+        return RespBean.success(order.getId());
+    }
 
-//     // public Order selectOrder(int userId, int goodsId) {
-//     //     return orderMapper.selectOrder(userId, goodsId);
-//     // }
-// }
+    public Order getOrder(int userId, int orderId) {
+        return orderMapper.selectOrderById(userId, orderId);
+    }
+
+    public List<OrderGoods> getOrderGoods(int orderId) {
+        return orderMapper.selectOrderGoods(orderId);
+    }
+}
