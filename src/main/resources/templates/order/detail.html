@@ -43,9 +43,9 @@
                     <span class="item-total-price" th:text="${'$' + goods.price * goods.amount}"></span>
                 </div>
             </div>
+        </div>
     </div>
-
-    </div>
+    
     <div class="order-total">
         <p>总金额: <span th:text="${order.totalPrice}"></span></p>
         <p>收货地址: <span th:text="${order.address}"></span></p>

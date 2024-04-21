@@ -16,7 +16,11 @@ public interface OrderMapper {
 
     List<OrderGoods> selectOrderGoods(int orderId);
     
-    List<Order> selectOrders(int userId, int offset, int limit);
+    List<Order> selectOrders(int userId, int offset, int limit, int mode);
 
     Order selectOrderById(int userId, int orderId);
+
+    int selectOrderRows(int userId, int mode);
+
+    int placeOrder(String paymentMethod, int userId, int orderId);
 }

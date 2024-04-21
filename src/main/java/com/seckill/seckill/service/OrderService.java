@@ -81,4 +81,14 @@ public class OrderService {
     public List<OrderGoods> getOrderGoods(int orderId) {
         return orderMapper.selectOrderGoods(orderId);
     }
+
+    public List<Order> getUserOrders(int userId, int offset, int limit, int mode) {
+        return orderMapper.selectOrders(userId, offset, limit, mode);
+    }
+
+    public int countUserOrders(int userId, int mode) {
+        return orderMapper.selectOrderRows(userId, mode);
+    }
+
+
 }

@@ -25,16 +25,7 @@
         where og.order_id = #{orderId}
         ;
     </select>
-
-    <select id="selectOrders">
-        select id, user_id, total_price, address, payment_time, create_time, status, payment_method
-        from orders
-        where user_id = #{userId}
-        order by create_time desc
-        limit #{offset}, #{limit}
-        ;
-    </select>
-
+    
     <select id="selectOrderById">
         select id, user_id, total_price, address, payment_time, create_time, status, payment_method
         from orders
@@ -42,4 +33,40 @@
         and id = #{orderId}
         ;
     </select>
+    
+        <select id="selectOrders">
+            select id, user_id, total_price, address, payment_time, create_time, status, payment_method
+            from orders
+            where user_id = #{userId}
+            <if test="mode==0">
+                and status = 0
+            </if>
+            <if test="mode==1">
+                and status = 1
+            </if>
+            order by create_time desc
+            limit #{offset}, #{limit}
+            ;
+        </select>
+
+    <select id="selectOrderRows">
+        select count(distinct id)
+        from orders
+        where user_id = #{userId}
+        <if test="mode==0">
+            and status = 0
+        </if>
+        <if test="mode==1">
+            and status = 1
+        </if>
+        ;
+    </select>
+
+    <update id="placeOrder">
+        update orders
+        set status = 1, payment_time = now(), payment_method = #{paymentMethod}
+        where user_id = #{userId}
+        and id = #{orderId}
+        ;
+    </update>
 </mapper>
