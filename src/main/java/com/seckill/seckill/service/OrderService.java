@@ -90,5 +90,12 @@ public class OrderService {
         return orderMapper.selectOrderRows(userId, mode);
     }
 
-
+    public RespBean placeOrder(String paymentMethod, int userId, int orderId) {
+        int result = orderMapper.placeOrder(paymentMethod, userId, orderId);
+        if (result == 1) {
+            Order order = getOrder(userId, orderId);
+            return RespBean.success(order.getTotalPrice());
+        }
+        return RespBean.error(RespBeanEnum.ORDER_FAIL);
+    }
 }

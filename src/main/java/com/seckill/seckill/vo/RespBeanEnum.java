@@ -13,11 +13,13 @@ public enum RespBeanEnum {
     ERROR(500, "SERVER ERROR"),
 
     LOGIN_ERROR(501, "Username or password is incorrect"),
+    UPDATE_INFO_ERROR(502, "Update user information failed"),
 
-    EMPTY_STOCK(502, "Out of stock"),
-    REPEATE_ERROR(503, "You have already bought this item"),
-    ORDER_FAIL(504, "Order failed"),
-    CART_ERROR(505, "Cart error"),
+    EMPTY_STOCK(510, "Out of stock"),
+    REPEATE_ERROR(511, "You have already bought this item"),
+    ORDER_FAIL(512, "Order failed"),
+
+    CART_ERROR(520, "Cart error"),
     ;
 
     private final Integer code;

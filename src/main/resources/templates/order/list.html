@@ -2,44 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>查询订单</title>
-    <link rel="stylesheet" th:href="@{/css/order_list.css}">
+    <title>Order Inquiry</title>
+    <link rel="stylesheet" th:href="@{/css/order/list.css}">
 </head>
 <body>
     <div th:replace="navbar.html"></div>
     <div class="container">
-        <h1>查询订单</h1>
+        <h1>My Orders</h1>
         <ul class="nav-tabs">
             <li class="nav-item">
-                <a th:class="|nav-link ${mode==-1?'active':''}|" th:href="@{/user/orders/(mode=-1)}">全部订单</a>
+                <a th:class="|nav-link ${mode==-1?'active':''}|" th:href="@{/user/orders/(mode=-1)}">All Orders</a>
             </li>
             <li class="nav-item">
-                <a th:class="|nav-link ${mode==0?'active':''}|" th:href="@{/user/orders/(mode=0)}">未支付</a>
+                <a th:class="|nav-link ${mode==0?'active':''}|" th:href="@{/user/orders/(mode=0)}">Unpaid</a>
             </li>
             <li class="nav-item">
-                <a th:class="|nav-link ${mode==1?'active':''}|" th:href="@{/user/orders/(mode=1)}">已付款</a>
+                <a th:class="|nav-link ${mode==1?'active':''}|" th:href="@{/user/orders/(mode=1)}">Paid</a>
             </li>
         </ul>
-        
         <div class="order-list">
             <div th:each="order : ${orders}">
-                <div class="order-item">
+                <a class="order-item" th:href="@{/order/detail(orderId=${order.id})}">
                     <div class="order-details">
-                        <div>订单日期: <span th:text="${order.createTime}"></span></div>
-                        <div>订单号: <span th:text="${order.id}"></span></div>
-                        <div>总金额: <span th:text="${'$' + order.totalPrice}"></span></div>
+                        <div>Order Number: 
+                            <span th:text="${order.id}"></span>
+                            <span th:if="${order.status == 0}" class="unpaid-status">UNPAID</span>
+                            <span th:if="${order.status == 1}" class="paid-status">PAID</span>
+                        </div>
+                        <div>Order Date: <span th:text="${#dates.format(order.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span></div>
+                        <div>Total: <span th:text="${'$' + order.totalPrice}"></span></div>
                     </div>
                     <div class="goods-header">
-                        <div class="header-item-info">商品名称</div>
-                        <div class="header-item">单价</div>
-                        <div class="header-item">数量</div>
-                        <div class="header-item">金额</div>
+                        <div class="header-item-info">Product Name</div>
+                        <div class="header-item">Unit Price</div>
+                        <div class="header-item">Quantity</div>
+                        <div class="header-item">Total</div>
                     </div>
                     <div class="goods-list">
                         <div th:each="goods : ${order.orderGoods}">
                             <div class="order-goods">
                                 <div class="item-info">
-                                    <img th:src="@{/image/iphone.jfif}" alt="商品图片">
+                                    <img th:src="@{/image/iphone.jfif}" alt="Product Image">
                                     <span class="item-name" th:text="${goods.name}"></span>
                                 </div>
                                 <span class="item-price" th:text="${'$' + goods.price}"></span>
@@ -48,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

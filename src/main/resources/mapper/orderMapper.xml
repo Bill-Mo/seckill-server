@@ -38,6 +38,7 @@
             select id, user_id, total_price, address, payment_time, create_time, status, payment_method
             from orders
             where user_id = #{userId}
+            and total_price &gt; 0
             <if test="mode==0">
                 and status = 0
             </if>

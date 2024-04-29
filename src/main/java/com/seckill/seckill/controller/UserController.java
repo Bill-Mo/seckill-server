@@ -39,7 +39,7 @@ public class UserController {
     public String orders(Model model, Page page, @RequestParam(name = "mode", defaultValue = "-1") int mode) {
         User user = hostHolder.getUser();
         page.setRows(orderService.countUserOrders(user.getId(), mode));
-        page.setPath("/user/orders");
+        page.setPath("/user/orders?mode=" + mode);
 
         List<Order> orders = orderService.getUserOrders(user.getId(), page.getOffset(), page.getLimit(), mode);
         for (Order order : orders) {
@@ -48,6 +48,7 @@ public class UserController {
         }
         
         model.addAttribute("orders", orders);
+        model.addAttribute("mode", mode);
         return "order/list";
     }
 }

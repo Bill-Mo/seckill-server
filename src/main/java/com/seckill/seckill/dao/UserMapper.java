@@ -10,6 +10,7 @@ public interface UserMapper {
 
     int insertUser(User user);
 
-    int updatePassword(int id, String password);
+    int updatePassword(int userId, String password);
 
+    int updateAddress(int userId, String address);
 }

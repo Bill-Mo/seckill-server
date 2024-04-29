@@ -22,5 +22,5 @@ public class Order {
     private Date paymentTime;
     private Date createTime;
     private int status;
-    private int paymentMethod;
+    private String paymentMethod;
 }

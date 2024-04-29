@@ -164,7 +164,7 @@ function checkoutCart() {
     .then(response => response.json())
     .then(data => {
       if (data.code === 200) {
-        window.location.href = `/seckill/order/detail/${data.orderId}`;
+        window.location.href = `/seckill/order/detail?orderId=${data.orderId}`;
       } else {
         alert(`下单失败,错误信息: ${data.message}`);
       }

@@ -77,5 +77,10 @@ public class UserService {
         return (Token) redisTemplate.opsForValue().get(RedisUtil.getTokenKey(tokenString));
     }
 
-    
+    public RespBean updateAddress(int userId, String address) {
+        if (userMapper.updateAddress(userId, address) == 1) {
+            return RespBean.success();
+        }
+        return RespBean.error(RespBeanEnum.UPDATE_INFO_ERROR);
+    }
 }

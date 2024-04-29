@@ -2,56 +2,60 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>订单确认</title>
-    <link rel="stylesheet" th:href="@{/css/order_detail.css}">
+    <title>Order Details</title>
+    <link rel="stylesheet" th:href="@{/css/order/detail.css}">
 </head>
 <body>
-<div class="container">
-    <h2>确认收货地址</h2>
-    <div class="address-section">
-        <p th:text="${order.address}"></p>
-        <button id="changeAddressBtn">修改地址</button>
-    </div>
-    <div class="payment-section">
-        <h2>确认支付方式</h2>
-        <div class="paymentMethod">
-            <select>
-                <option value="credit_card">信用卡</option>
-                <option value="paypal">PayPal</option>
-                <option value="wechat_pay">微信支付</option>
-                <option value="alipay">支付宝</option>
-            </select>
+    <div th:replace="navbar.html"></div>
+    <div class="container">
+        <div class="address-section">
+            <h2>Shipping Address</h2>
+            <p th:text="${order.address}"></p>
+            <!-- Show Edit button only if order is not paid (status != 1) -->
+            <button class="change-addr-btn" th:if="${order.status != 1}">Edit Address</button>
         </div>
-    </div>
-    <div class="goods-confirm">
-        <h2>确认商品</h2>
-        <div class="goods-header">
-            <div class="header-item-info">商品名称</div>
-            <div class="header-item">单价</div>
-            <div class="header-item">数量</div>
-            <div class="header-item">金额</div>
+        <div class="payment-section">
+            <h2>Payment Method</h2>
+            <div class="paymentMethod">
+                <!-- Fix payment method if order is paid (status == 1), else allow selection -->
+                <select th:disabled="${order.status == 1}">
+                    <option value="credit_card" th:selected="${order.paymentMethod == 'credit_card'}">Credit Card</option>
+                    <option value="paypal" th:selected="${order.paymentMethod == 'paypal'}">PayPal</option>
+                    <option value="apple_pay" th:selected="${order.paymentMethod == 'apple_pay'}">Apple Pay</option>
+                    <option value="google_pay" th:selected="${order.paymentMethod == 'google_pay'}">Google Pay</option>
+                </select>
+            </div>
         </div>
-        <div class="goods-list">
-            <div th:each="goods : ${orderGoodsList}">
-                <div class="order-goods">
-                    <div class="item-info">
-                        <img th:src="@{/image/iphone.jfif}" alt="商品图片">
-                        <span class="item-name" th:text="${goods.name}"></span>
+        <div class="goods-confirm">
+            <h2>Products Info</h2>
+            <div class="goods-header">
+                <div class="header-item-info">Product</div>
+                <div class="header-item">Unit Price</div>
+                <div class="header-item">Quantity</div>
+                <div class="header-item">Total</div>
+            </div>
+            <div class="goods-list">
+                <div th:each="goods : ${orderGoodsList}">
+                    <div class="order-goods">
+                        <div class="item-info">
+                            <img th:src="@{/image/iphone.jfif}" alt="pic">
+                            <span class="item-name" th:text="${goods.name}"></span>
+                        </div>
+                        <span class="item-price" th:text="${'$' + goods.price}"></span>
+                        <span class="item-amount" th:text="${goods.amount}"></span>
+                        <span class="item-total-price" th:text="${'$' + goods.price * goods.amount}"></span>
                     </div>
-                    <span class="item-price" th:text="${'$' + goods.price}"></span>
-                    <span class="item-amount" th:text="${goods.amount}"></span>
-                    <span class="item-total-price" th:text="${'$' + goods.price * goods.amount}"></span>
                 </div>
             </div>
         </div>
+        
+        <div class="order-total">
+            <p>TOTAL: <span th:text="${'$' + order.totalPrice}"></span></p>
+            <p>SHIP TO: <span th:text="${order.address}"></span></p>
+            <!-- Hide Place Order button if order is paid (status == 1) -->
+            <button class="place-order-btn" th:if="${order.status != 1}" th:orderId="${order.id}" onclick="placeOrder(this)">Place Order</button>
+        </div>
     </div>
-    
-    <div class="order-total">
-        <p>总金额: <span th:text="${order.totalPrice}"></span></p>
-        <p>收货地址: <span th:text="${order.address}"></span></p>
-        <button id="submitOrderBtn">提交订单</button>
-    </div>
-</div>
-<script th:src="@{placeOrder.js}"></script>
+    <script th:src="@{/js/placeOrder.js}"></script>
 </body>
 </html>

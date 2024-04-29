@@ -19,6 +19,10 @@
     </insert>
 
     <update id="updatePassword">
-        update user set password = #{password} where username = #{username}
+        update user set password = #{password} where id = #{userId}
+    </update>
+
+    <update id="updateAddress">
+        update user set address = #{address} where id = #{userId}
     </update>
 </mapper>

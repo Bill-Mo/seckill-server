@@ -1,0 +1,158 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+/* 导航栏整体样式 */
+.nav-tabs {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #dee2e6; /* 底边框 */
+    display: flex;
+}
+
+/* 每个导航项的样式 */
+.nav-item {
+    margin: 0 5px; /* 左右间隔 */
+}
+
+/* 导航链接基本样式 */
+.nav-link {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #007bff; /* 蓝色 */
+    text-align: center;
+}
+
+/* 当前活跃的导航链接 */
+.nav-link.active {
+    font-weight: bold;
+    color: #dc3545; /* 红色 */
+    border-bottom: 3px solid #dc3545; /* 下划线标识活跃状态 */
+}
+
+/* 鼠标悬停时的导航链接样式 */
+.nav-link:hover {
+    background-color: #e9ecef; /* 鼠标悬停时的背景色 */
+    color: #495057; /* 鼠标悬停时的文字颜色 */
+}
+
+.order-list {
+    padding: 10px;
+}
+
+.order-item {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    display: block;
+    position: relative;  /* 添加相对定位 */
+}
+
+.order-item a.payment-link {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #dc3545;  /* 红色背景 */
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;  /* 圆角边框 */
+}
+
+.order-item a.payment-link:hover {
+    background-color: #c82333;  /* 鼠标悬停时颜色加深 */
+}
+
+.order-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+
+.unpaid-status {
+    color: red;            /* 设置文字颜色为红色 */
+    font-weight: bold;     /* 加粗字体 */
+    padding: 5px 10px;     /* 上下各5px，左右各10px的内边距 */
+    border-radius: 50%;    /* 设置边框半径为50%，以形成圆形 */
+    background-color: white;  /* 设置背景颜色为白色，也可以根据需要调整 */
+    border: 2px solid red; /* 设置边框为红色，厚度为2px */
+    display: inline-block; /* 使元素以块级内联的方式显示，确保内边距和边框半径有效 */
+}
+
+.paid-status {
+    color: limegreen;            /* 设置文字颜色为红色 */
+    font-weight: bold;     /* 加粗字体 */
+    padding: 5px 10px;     /* 上下各5px，左右各10px的内边距 */
+    border-radius: 50%;    /* 设置边框半径为50%，以形成圆形 */
+    background-color: white;  /* 设置背景颜色为白色，也可以根据需要调整 */
+    border: 2px solid limegreen; /* 设置边框为红色，厚度为2px */
+    display: inline-block; /* 使元素以块级内联的方式显示，确保内边距和边框半径有效 */
+}
+
+
+.goods-header {
+    display: flex;
+    text-align: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.header-item, .header-item-info {
+    flex: 1;
+    text-align: center;
+}
+
+.header-item-info {
+    min-width: 350px;
+}
+
+.goods-list {
+    padding: 10px;
+}
+
+.order-goods {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.item-info, .item-price, .item-amount, .item-total-price, span {
+    flex: 1;
+    text-align: center;
+}
+
+
+.item-info {
+    min-width: 350px;
+    display: flex;
+    align-items: center;
+}
+
+.item-info img {
+    max-width: 70px;
+    max-height: 70px;
+}
+
+.goods-list .item-name {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 10px;
+}
