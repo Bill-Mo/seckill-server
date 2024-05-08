@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.seckill.seckill.annotation.LoginRequired;
-import com.seckill.seckill.entity.CartGoods;
 import com.seckill.seckill.entity.Order;
 import com.seckill.seckill.entity.OrderGoods;
 import com.seckill.seckill.entity.User;
@@ -40,29 +40,14 @@ public class OrderController {
     @Autowired
     private CartService cartService;
 
-    @RequestMapping("/checkout")
+    @RequestMapping("")
     @LoginRequired
     @Transactional
-    public ResponseEntity<?> checkout() {
-        User user = hostHolder.getUser();
-        List<CartGoods> cart = cartService.getCart(user.getId());
-        RespBean respBean = orderService.checkout(user.getId(), user.getAddress(), cart);
-        
-        if (respBean.getCode() == 200) {
-            int orderId = (int) respBean.getObj();
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 200);
-            response.put("orderId", orderId);
-            return ResponseEntity.ok(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", respBean.getCode());
-            response.put("message", respBean.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    @ResponseBody
+    public RespBean checkout() {
+        RespBean respBean = orderService.checkout();
+        return respBean;
     }
-
-
 
     @LoginRequired
     @PostMapping("/buyNow")
@@ -71,18 +56,15 @@ public class OrderController {
     public RespBean checkout(@RequestBody Map<String, Object> orderRequest) {
         Integer goodsId = Integer.parseInt((String) orderRequest.get("goodsId"));
         Integer amount = Integer.parseInt((String) orderRequest.get("amount"));
-
-        User user = hostHolder.getUser();
-        RespBean respBean = orderService.checkout(user.getId(), user.getAddress(), goodsId, amount);
+        RespBean respBean = orderService.checkout(goodsId, amount);
         return respBean;
     }
 
 
     @LoginRequired
-    @RequestMapping("/{orderId}")
+    @GetMapping("/{orderId}")
     public String detail(@PathVariable("orderId") int orderId, Model model) {
-        User user = hostHolder.getUser();
-        Order order = orderService.getOrder(user.getId(), orderId);
+        Order order = orderService.getOrder(orderId);
         List<OrderGoods> orderGoodsList = orderService.getOrderGoods(orderId);
         model.addAttribute("order", order);
         model.addAttribute("orderGoodsList", orderGoodsList);
@@ -90,33 +72,18 @@ public class OrderController {
     }
 
     @LoginRequired
-    @RequestMapping("/placeOrder")
+    @PostMapping("/placeOrder")
     @Transactional
-    public ResponseEntity<?> placeOrder(@RequestParam("orderId") int orderId, @RequestParam("paymentMethod") String paymentMethod, Model model) {
-        User user = hostHolder.getUser();
-        RespBean respBean = orderService.placeOrder(paymentMethod, user.getId(), orderId);
-        if (respBean.getCode() != 200) {
-        }
-        double totalPrice = (double) respBean.getObj();
-        model.addAttribute("orderId", orderId);
-        model.addAttribute("totalPrice", totalPrice);
-
-        if (respBean.getCode() == 200) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 200);
-            response.put("orderId", orderId);
-            response.put("totalPrice", totalPrice);
-            return ResponseEntity.ok(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", respBean.getCode());
-            response.put("message", respBean.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    @ResponseBody
+    public RespBean placeOrder(@RequestBody Map<String, Object> orderRequest) {
+        String paymentMethod = (String) orderRequest.get("paymentMethod");
+        Integer orderId = Integer.parseInt((String) orderRequest.get("orderId"));
+        RespBean respBean = orderService.placeOrder(paymentMethod, orderId);
+        return respBean;
     }
 
     @LoginRequired
-    @RequestMapping("/success")
+    @GetMapping("/success")
     public String success(Model model, @RequestParam("orderId") int orderId, @RequestParam("totalPrice") double totalPrice) {
         model.addAttribute("orderId", orderId);
         model.addAttribute("totalPrice", totalPrice);
@@ -124,9 +91,11 @@ public class OrderController {
     }
 
     @LoginRequired
-    @RequestMapping("/update/address")
+    @PostMapping("/address")
     @ResponseBody
-    public RespBean updateOrderAddress(@RequestParam("orderId") int orderId, @RequestParam("address") String address) {
+    public RespBean updateOrderAddress(@RequestBody Map<String, Object> orderRequest) {
+        Integer orderId = Integer.parseInt((String) orderRequest.get("orderId"));
+        String address = (String) orderRequest.get("address");
         RespBean respBean = orderService.updateOrderAddress(orderId, address);
         return respBean;
     }

@@ -38,12 +38,12 @@
                 <div th:each="goods : ${orderGoodsList}">
                     <div class="order-goods">
                         <div class="item-info">
-                            <img th:src="@{/image/iphone.jfif}" alt="pic">
+                            <img th:src="@{/image/{ipath}(ipath=${goods.image})}" alt="pic">
                             <span class="item-name" th:text="${goods.name}"></span>
                         </div>
-                        <span class="item-price" th:text="${'$' + goods.price}"></span>
+                        <span class="item-price" th:text="${'$' + #numbers.formatDecimal(goods.price, 0, 2)}"></span>
                         <span class="item-amount" th:text="${goods.amount}"></span>
-                        <span class="item-total-price" th:text="${'$' + goods.price * goods.amount}"></span>
+                        <span class="item-total-price" th:text="${'$' + #numbers.formatDecimal(goods.price * goods.amount, 0, 2)}"></span>
                     </div>
                 </div>
             </div>

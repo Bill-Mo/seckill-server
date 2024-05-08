@@ -55,11 +55,10 @@ public class UserController {
     @LoginRequired
     @GetMapping("/orders")
     public String orders(Model model, Page page, @RequestParam(name = "mode", defaultValue = "-1") int mode) {
-        User user = hostHolder.getUser();
-        page.setRows(orderService.countUserOrders(user.getId(), mode));
+        page.setRows(orderService.countUserOrders(mode));
         page.setPath("/user/orders?mode=" + mode);
 
-        List<Order> orders = orderService.getUserOrders(user.getId(), page.getOffset(), page.getLimit(), mode);
+        List<Order> orders = orderService.getUserOrders(page.getOffset(), page.getLimit(), mode);
         for (Order order : orders) {
             List<OrderGoods> orderGoodsList = orderService.getOrderGoods(order.getId());
             order.setOrderGoods(orderGoodsList);

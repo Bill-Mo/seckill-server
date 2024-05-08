@@ -26,7 +26,7 @@
                         <input type="checkbox" th:id="'item-' + ${iterStat.index}" th:checked="${item.status==1?true:false}">
                     </div>
                     <div class="item-info">
-                        <img class="item-image" th:src="@{/image/iphone.jfif}" alt="商品图片">
+                        <img class="item-image" th:src="@{/image/{ipath}(ipath=${item.image})}" alt="商品图片">
                         <div class="item-name" th:text="${item.name}">商品名称</div>
                     </div>
                     <div class="item-price" th:text="${'$' + #numbers.formatDecimal(item.price, 0, 2)}">$99.99</div>

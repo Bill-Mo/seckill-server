@@ -40,10 +40,16 @@
         ;
     </select>
 
-
     <update id="updateGoodsStock">
         update goods
         set stock = stock + #{stock}
+        where id = #{goodsId}
+        ;
+    </update>
+
+    <update id="updateGoodsSales">
+        update goods
+        set sales = sales + #{sales}
         where id = #{goodsId}
         ;
     </update>

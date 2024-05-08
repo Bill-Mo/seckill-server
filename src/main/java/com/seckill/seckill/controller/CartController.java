@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +46,7 @@ public class CartController {
     GoodsService goodsService;
 
     @LoginRequired
-    @PostMapping("/add")
+    @PostMapping("")
     @ResponseBody
     public RespBean addToCart(@RequestBody Map<String, Object> cartItemRequest) {
         Integer goodsId = Integer.parseInt((String) cartItemRequest.get("goodsId"));
@@ -56,38 +58,37 @@ public class CartController {
         return respBean;
     }
 
-    @RequestMapping("/detail")
+    @GetMapping("")
     @LoginRequired
     public String detail(Model model) {
         List<CartGoods> cart = cartService.getCart(hostHolder.getUser().getId());
-        for (CartGoods goods : cart) {
-        }
         model.addAttribute("cart", cart);
         return "/cart";
     }
 
-    @RequestMapping("/delete/{id}")
+    @PostMapping("/{id}")
     @LoginRequired
-    public String delete(@PathVariable("id") int goodsId) {
-        cartService.deleteFromCart(goodsId, hostHolder.getUser().getId());
-        return "redirect:/cart/detail";
-    }
-
-    @RequestMapping("/update")
-    @LoginRequired
-    public String update(@RequestParam("id") int goodsId, @RequestParam("amount") int amount) {
-        System.out.println("goodsId: " + goodsId + " amount: " + amount + " userId: " + hostHolder.getUser().getId());
-        cartService.updateCartGoodsAmount(hostHolder.getUser().getId(), goodsId, amount);
-        return "redirect:/cart/detail";
-    }
-
-    @RequestMapping("/select/{id}")
-    @LoginRequired
-    public String select(@PathVariable("id") int goodsId) {
-        RespBean respBean = cartService.changeCartGoodsStatus(hostHolder.getUser().getId(), goodsId);
-        if (respBean.getCode() != 200) {
-            return "error";
+    @ResponseBody
+    public RespBean update(@PathVariable("id") int goodsId, @RequestBody Map<String, Object> cartItemRequest) {
+        RespBean respBean;
+        if (cartItemRequest == null || cartItemRequest.get("amount") == null) {
+            respBean = cartService.changeCartGoodsStatus(hostHolder.getUser().getId(), goodsId);
+        } else {
+            int amount = (int) cartItemRequest.get("amount");
+            respBean = cartService.updateCartGoodsAmount(hostHolder.getUser().getId(), goodsId, amount);
         }
-        return "redirect:/cart/detail";
+
+        return respBean;
     }
+    
+    @DeleteMapping("/{id}")
+    @LoginRequired
+    @ResponseBody
+    public RespBean delete(@PathVariable("id") @RequestBody String goodsId) {
+        // Integer goodsId = Integer.parseInt((String) cartItemRequest.get("goodsId"));
+        int id = Integer.parseInt(goodsId);
+        RespBean respBean = cartService.deleteFromCart(id, hostHolder.getUser().getId());
+        return respBean;
+    }
+
 }

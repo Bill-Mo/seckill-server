@@ -14,19 +14,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateAddress(orderId, address) {
-    fetch(`/seckill/order/update/address?orderId=${orderId}&address=${encodeURIComponent(address)}`, {
-        method: 'GET', // Assuming GET, but POST might be more appropriate
+    fetch(`/seckill/order/address`, 
+    {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            // Include any other headers like Authorization if required
-        }
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+            orderId: orderId,
+            address: address
+        }),
     })
     .then(response => response.json())
     .then(data => {
         if (data.code === 200) {
             window.location.reload(); // Reload the page to show the updated address
         } else {
-            window.location.href = '/error'; // Redirect to an error page
+            alert(`Error updating address: ${data.message}`);
         }
     })
     .catch(error => {
@@ -39,15 +44,22 @@ function updateAddress(orderId, address) {
 function placeOrder(button) {
     var paymentMethod = document.querySelector('select').value;
     var orderId = button.getAttribute('orderId');
-    var url = '/seckill/order/placeOrder?paymentMethod=' + paymentMethod + '&orderId=' + orderId;
 
-    fetch(url, {
+    fetch(`/seckill/order/placeOrder`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+            orderId: orderId,
+            paymentMethod: paymentMethod,
+        })
     })
     .then(response => response.json())
     .then(data => {
         if (data.code === 200) {
-            window.location.href = `/seckill/order/success?orderId=${data.orderId}` + `&totalPrice=${data.totalPrice}`;
+            window.location.href = `/seckill/order/success?orderId=${orderId}` + `&totalPrice=${data.obj}`;
         } else {
             alert(`Place order fail: ${data.message}`);
         }

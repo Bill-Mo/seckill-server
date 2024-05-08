@@ -51,11 +51,30 @@ public class GoodsService {
 
     public RespBean updateGoodsStock(int goodsId, int stock) {
         Goods goods = findGoodsById(goodsId);
-        if (goods == null || goods.getStock() + stock < 0) {
-            return RespBean.error(RespBeanEnum.EMPTY_STOCK);
+        if (goods == null) {
+            return RespBean.error(RespBeanEnum.GOODS_NOT_FOUND);
+        }
+        if (goods.getStock() + stock < 0) {
+            return RespBean.error(RespBeanEnum.OUT_OF_STOCK);
         }
 
         int result = goodsMapper.updateGoodsStock(goodsId, stock);
+        if (result == 1) {
+            return RespBean.success();
+        } else {
+            return RespBean.error(RespBeanEnum.ORDER_FAIL);
+        }
+    }
+
+    public RespBean updateGoodsSales(int goodsId, int sales) {
+        Goods goods = findGoodsById(goodsId);
+        if (goods == null) {
+            return RespBean.error(RespBeanEnum.GOODS_NOT_FOUND);
+        }
+        if (goods.getSales() + sales < 0) {
+            return RespBean.error(RespBeanEnum.INVALID_INFO);
+        }
+        int result = goodsMapper.updateGoodsSales(goodsId, sales);
         if (result == 1) {
             return RespBean.success();
         } else {

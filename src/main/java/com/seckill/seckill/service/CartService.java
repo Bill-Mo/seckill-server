@@ -31,7 +31,7 @@ public class CartService {
         if (cartMapper.insertCartGoods(userId, goodsId, amount) == 1) {
             return RespBean.success();
         } else {
-            return RespBean.error(RespBeanEnum.CART_ERROR);
+            return RespBean.error(RespBeanEnum.INSERTION_ERROR);
         }
     }
 
@@ -39,8 +39,11 @@ public class CartService {
         return cartMapper.selectCartGoods(userId);
     }
 
-    public void deleteFromCart(int goodsId, int userId) {
-        cartMapper.deleteCartGoods(userId, goodsId);
+    public RespBean deleteFromCart(int goodsId, int userId) {
+        if (cartMapper.deleteCartGoods(userId, goodsId) != 1) {
+            return RespBean.error(RespBeanEnum.DELETE_CART_ERROR);
+        }
+        return RespBean.success();
     }
 
     public RespBean updateCartGoodsAmount(int userId, int goodsId, int amount) {
@@ -49,7 +52,7 @@ public class CartService {
         int newAmount = amount + cartGoods.getAmount();
 
         newAmount = Math.min(newAmount, Math.min(goods.getStock(), goods.getPurchaseLimit()));
-        int res = cartMapper.updateCartGoodsAmount(userId, goodsId, amount);
+        int res = cartMapper.updateCartGoodsAmount(userId, goodsId, newAmount);
         if (res == 1) {
             return RespBean.success();
         } else {
@@ -62,7 +65,7 @@ public class CartService {
         if (result == 1) {
             return RespBean.success();
         } else {
-            return RespBean.error(RespBeanEnum.CART_ERROR);
+            return RespBean.error(RespBeanEnum.UPDATE_CART_ERROR);
         }
     }
 }

@@ -42,7 +42,7 @@
                         <div th:each="goods : ${order.orderGoods}">
                             <div class="order-goods">
                                 <div class="item-info">
-                                    <img th:src="@{/image/iphone.jfif}" alt="Product Image">
+                                    <img th:src="@{/image/{ipath}(ipath=${goods.image})}" alt="Product Image">
                                     <span class="item-name" th:text="${goods.name}"></span>
                                 </div>
                                 <span class="item-price" th:text="${'$' + goods.price}"></span>

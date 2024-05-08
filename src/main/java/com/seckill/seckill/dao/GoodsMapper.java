@@ -21,5 +21,7 @@ public interface GoodsMapper {
 
     int updateGoodsStock(int goodsId, int stock);
 
+    int updateGoodsSales(int goodsId, int sales);
+
     int updateSeckillGoodsStock(int goodsId, int stock);
 }

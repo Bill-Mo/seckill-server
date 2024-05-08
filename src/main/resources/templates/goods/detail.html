@@ -9,7 +9,7 @@
     <div th:replace="navbar.html"></div>
     <div class="product-details">
         <div class="product-image">
-            <img th:src="@{/image/iphone.jfif}" alt="Product Image">
+            <img th:src="@{/image/{ipath}(ipath=${goods.image})}" alt="Product Image">
         </div>
         <div class="product-info">
             <h2 th:text="${goods.name}">商品名称</h2>
@@ -19,7 +19,7 @@
                 <span class="product-sale" th:text="${(goods.formattedSales) + ' bought in last month'}">Sales</span>
             </div>
             <div class="buttons">
-                <button class="add-to-cart" th:data-goods-id="${goods.id}" onclick="clickButton('/seckill/cart/add', '/seckill/cart/detail')">Add to Cart</button>
+                <button class="add-to-cart" th:data-goods-id="${goods.id}" onclick="clickButton('/seckill/cart', '/seckill/cart')">Add to Cart</button>
                 <button class="buy-now" th:data-goods-id="${goods.id}" onclick="clickButton('/seckill/order/buyNow', '/seckill/order/')">Buy Now</button>
             </div>
         </div>

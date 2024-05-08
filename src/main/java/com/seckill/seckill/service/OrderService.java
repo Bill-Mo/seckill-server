@@ -33,14 +33,23 @@ public class OrderService {
 
     @Autowired
     CartService cartService;
+
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private HostHolder hostHolder;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
-    public RespBean checkout(int userId, String address, List<CartGoods> cart) {
+    public RespBean checkout() {
+        int userId = hostHolder.getUser().getId();
+        String address = hostHolder.getUser().getAddress();
+
+        List<CartGoods> cart = cartService.getCart(userId);
+
         Order order = new Order();
 
         // Compute total price
@@ -72,7 +81,8 @@ public class OrderService {
                 // Add goods into order, update goods stock, and remove goods from cart, 
                 int result = orderMapper.insertOrderGoods(order.getId(), cartGoods.getId(), cartGoods.getAmount(), cartGoods.getPrice());
                 RespBean reduceStock = goodsService.updateGoodsStock(cartGoods.getId(), -cartGoods.getAmount());
-                if (result != 1 || reduceStock.getCode() != 200) {
+                RespBean increaseSales = goodsService.updateGoodsSales(cartGoods.getId(), cartGoods.getAmount());
+                if (result != 1 || reduceStock.getCode() != 200 || increaseSales.getCode() != 200) {
                     return RespBean.error(RespBeanEnum.ORDER_FAIL);
                 }
                 cartService.deleteFromCart(cartGoods.getId(), userId);
@@ -83,7 +93,10 @@ public class OrderService {
     }
 
     @Transactional
-    public RespBean checkout(int userId, String address, int goodsId, int amount) {
+    public RespBean checkout(int goodsId, int amount) {
+        int userId = hostHolder.getUser().getId();
+        String address = hostHolder.getUser().getAddress();
+
         Order order = new Order();
         Goods goods = goodsService.findGoodsById(goodsId);
         if (goods == null) {
@@ -107,32 +120,33 @@ public class OrderService {
         // Add goods into order, update goods stock, and remove goods from cart, 
         int result = orderMapper.insertOrderGoods(order.getId(), goods.getId(), amount, goods.getPrice());
         RespBean reduceStock = goodsService.updateGoodsStock(goods.getId(), -amount);
-        if (result != 1 || reduceStock.getCode() != 200) {
-            return RespBean.error(RespBeanEnum.ORDER_FAIL);
-        }
+        RespBean increaseSales = goodsService.updateGoodsSales(goods.getId(), amount);
+                if (result != 1 || reduceStock.getCode() != 200 || increaseSales.getCode() != 200) {
+                    return RespBean.error(RespBeanEnum.ORDER_FAIL);
+                }
         return RespBean.success(order.getId());
     }
 
-    public Order getOrder(int userId, int orderId) {
-        return orderMapper.selectOrderById(userId, orderId);
+    public Order getOrder(int orderId) {
+        return orderMapper.selectOrderById(hostHolder.getUser().getId(), orderId);
     }
 
     public List<OrderGoods> getOrderGoods(int orderId) {
         return orderMapper.selectOrderGoods(orderId);
     }
 
-    public List<Order> getUserOrders(int userId, int offset, int limit, int mode) {
-        return orderMapper.selectOrders(userId, offset, limit, mode);
+    public List<Order> getUserOrders(int offset, int limit, int mode) {
+        return orderMapper.selectOrders(hostHolder.getUser().getId(), offset, limit, mode);
     }
 
-    public int countUserOrders(int userId, int mode) {
-        return orderMapper.selectOrderRows(userId, mode);
+    public int countUserOrders(int mode) {
+        return orderMapper.selectOrderRows(hostHolder.getUser().getId(), mode);
     }
 
-    public RespBean placeOrder(String paymentMethod, int userId, int orderId) {
-        int result = orderMapper.placeOrder(paymentMethod, userId, orderId);
+    public RespBean placeOrder(String paymentMethod, int orderId) {
+        int result = orderMapper.placeOrder(paymentMethod, hostHolder.getUser().getId(), orderId);
         if (result == 1) {
-            Order order = getOrder(userId, orderId);
+            Order order = getOrder(orderId);
             return RespBean.success(order.getTotalPrice());
         }
         return RespBean.error(RespBeanEnum.ORDER_FAIL);

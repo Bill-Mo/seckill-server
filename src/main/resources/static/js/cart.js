@@ -10,8 +10,15 @@ const increaseButtons = document.querySelectorAll('.amount-btn.increase');
 const checkoutButton = document.querySelector('#checkout-btn');
 
 function removeItem(itemId, cartItem) {
-    fetch(`/seckill/cart/delete/${itemId}`, {
-        method: 'DELETE'
+    fetch(`/seckill/cart/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+            itemId
+        }),
     }).then(response => {
         if (response.ok) {
             cartItem.remove();
@@ -20,8 +27,15 @@ function removeItem(itemId, cartItem) {
 }
 
 function updateCartItemAmount(itemId, newAmount) {
-    fetch(`/seckill/cart/update/?id=${itemId}&amount=${newAmount}`, {
-        method: 'POST'
+    fetch(`/seckill/cart/${itemId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+            amount: newAmount,
+        }),
     }).then(response => {
         if (response.ok) {
             window.location.reload();
@@ -67,8 +81,13 @@ function updateSelectedCount() {
 
 function updateSelectedStatus(itemId) {
     console.log(`Update selected status for item: ${itemId}`);
-    fetch(`/seckill/cart/select/${itemId}`, {
-        method: 'POST'
+    fetch(`/seckill/cart/${itemId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({}),
     }).then(response => {
         if (response.ok) {
         }
@@ -76,13 +95,17 @@ function updateSelectedStatus(itemId) {
 }
 
 function checkoutCart() {
-    fetch('/seckill/order/checkout', {
-      method: 'POST'
+    fetch('/seckill/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
     })
     .then(response => response.json())
     .then(data => {
       if (data.code === 200) {
-        window.location.href = `/seckill/order/detail?orderId=${data.orderId}`;
+        window.location.href = `/seckill/order/${data.obj}`;
       } else {
         alert(`下单失败,错误信息: ${data.message}`);
       }
@@ -181,6 +204,10 @@ amountInputs.forEach(input => {
     if (newAmount > limit) {
         alert(`You cannot buy more than ${limit}`);
         newAmount = event.target.value = limit;
+    }
+    if (newAmount < 1) {
+        alert('Amount cannot be less than 1');
+        newAmount = event.target.value = 1;
     }
     updateCartItemAmount(itemId, newAmount - orginalAmount);
   });

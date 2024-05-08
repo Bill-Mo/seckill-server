@@ -31,8 +31,13 @@ body {
 }
 
 .product-link {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
     text-decoration: none;
     color: inherit;
+    
 }
 
 .product-item:hover {
@@ -41,11 +46,12 @@ body {
 }
 
 .product-image {
-    width: 100%;
-    height: auto;
+    width: 250px;
+    height: 250px;
 }
 
 .product-info {
+    margin-top: auto;
     padding: 10px;
 }
 
