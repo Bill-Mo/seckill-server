@@ -8,14 +8,17 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.seckill.seckill.annotation.LoginRequired;
 import com.seckill.seckill.entity.User;
 import com.seckill.seckill.service.UserService;
 import com.seckill.seckill.util.HostHolder;
+import com.seckill.seckill.util.RedisUtil;
 import com.seckill.seckill.util.SeckillUtil;
 import com.seckill.seckill.vo.RespBean;
+import com.seckill.seckill.vo.RespBeanEnum;
 
 @Controller
 public class LoginController {
@@ -58,9 +61,8 @@ public class LoginController {
 
         @LoginRequired
         @RequestMapping("/logout")
-        public String logout(HttpServletRequest request) {
-            User user = hostHolder.getUser();
-            RespBean respBean = userService.logout(user.getId());
+        public String logout(@CookieValue("token") String tokenString){
+            RespBean respBean = userService.logout(tokenString);
             return "redirect:/toLogin";
         }
 }

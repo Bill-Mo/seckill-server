@@ -16,6 +16,9 @@ public enum RespBeanEnum {
 
     LOGIN_ERROR(501, "Username or password is incorrect"),
     UPDATE_INFO_ERROR(502, "Update user information failed"),
+    INVALID_INFO(503, "Invalid information"),
+    DUPLICATE_INFO(504, "Please Enter a different value"),
+    USER_NOT_FOUND(505, "User not found"),
 
     EMPTY_STOCK(510, "Out of stock"),
     REPEATE_ERROR(511, "You have already bought this item"),

@@ -77,14 +77,51 @@ public class UserService {
         return (Token) redisTemplate.opsForValue().get(RedisUtil.getTokenKey(tokenString));
     }
 
-    public RespBean logout(int userId) {
-        clearCache(userId);
+    public RespBean logout(String tokenString) {
+        String redisKey = RedisUtil.getTokenKey(tokenString);
+        Token loginTicket = (Token) redisTemplate.opsForValue().get(redisKey);
+        loginTicket.setStatus(1);
+        redisTemplate.opsForValue().set(redisKey, loginTicket);
         return RespBean.success();
     }
 
-    public RespBean updateUser(User user) {
-        if (userMapper.updateUser(user) == 1) {
-            clearCache(user.getId());
+    public RespBean updateUser(User user, String field, String value, String tokenString) {
+        int result = 0;
+        if (field.equals("username")) {
+            // validate username
+            if (StringUtils.isBlank(value)) {
+                return RespBean.error(RespBeanEnum.INVALID_INFO);
+            }
+            if (user.getUsername().equals(value)) {
+                return RespBean.error(RespBeanEnum.DUPLICATE_INFO);
+            }
+
+            result = userMapper.updateUsername(value, user.getId());
+        } else if (field.equals("password")) {
+            // validate password
+            if (StringUtils.isBlank(value)) {
+                return RespBean.error(RespBeanEnum.INVALID_INFO);
+            }
+            if (user.getPassword().equals(value)) {
+                return RespBean.error(RespBeanEnum.DUPLICATE_INFO);
+            }
+
+            result = userMapper.updatePassword(value, user.getId());
+            logout(tokenString);
+        } else if (field.equals("address")) {
+            // validate address
+            if (StringUtils.isBlank(value)) {
+                return RespBean.error(RespBeanEnum.INVALID_INFO);
+            }
+            if (user.getAddress().equals(value)) {
+                return RespBean.error(RespBeanEnum.DUPLICATE_INFO);
+            }
+
+            result = userMapper.updateAddress(value, user.getId());
+        }
+        clearCache(user.getId());
+
+        if (result == 1) {
             return RespBean.success();
         }
         return RespBean.error(RespBeanEnum.UPDATE_INFO_ERROR);

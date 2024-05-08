@@ -17,7 +17,11 @@ function clickButton(requestPath, returnPath) {
     .then(response => response.json())
     .then(data => {
         if (data.code === 200) {
+            console.log(data);
             console.log('Item added to cart.');
+            if (returnPath === '/seckill/order/') {
+                returnPath += data.obj;
+            }
             window.location.href = returnPath;
         } else if (data.code !== 200) {
             alert(data.message);

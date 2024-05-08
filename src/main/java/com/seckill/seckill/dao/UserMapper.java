@@ -12,5 +12,9 @@ public interface UserMapper {
 
     int insertUser(User user);
 
-    int updateUser(User user);
+    int updateUsername(String username, int userId);
+
+    int updatePassword(String password, int userId);
+
+    int updateAddress(String address, int userId);
 }

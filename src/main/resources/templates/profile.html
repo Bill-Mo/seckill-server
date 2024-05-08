@@ -9,34 +9,37 @@
     <div th:replace="navbar.html"></div>
     <section>
         <h2>Profile Details</h2>
-        <p><strong>Username:</strong> <span id="username" th:text="${user.username}">exampleUser</span>
-            <!-- Button to change username -->
-            <button onclick="document.getElementById('usernameForm').style.display='block'">Change Username</button>
-            <form id="usernameForm" action="/seckill/user/update/username" method="post" style="display:none;">
-                <input type="text" name="value" placeholder="New Username">
-                <button type="submit">Update</button>
-            </form>
+        <p>
+            <strong>Username:</strong> 
+            <span id="username" th:text="${user.username}">exampleUser</span>
+            <button onclick="showUsernameForm()">Change Username</button>
         </p>
+        <div id="usernameForm" style="display:none;">
+            <input type="text" id="newUsernameInput" placeholder="New Username">
+            <button onclick="updateUsername()">Update</button>
+        </div>
+        
+        <p><strong>Password: ********</strong> 
+            <!-- Button to change password -->
+            <button onclick="showPasswordForm()">Change Password</button>
+        </p>
+        <div id="passwordForm" style="display:none;">
+            <input type="text" id="newPasswordInput" placeholder="New Password">
+            <button onclick="updatePassword()">Update</button>
+        </div>
+        
+        <p>
+            <strong>Address:</strong> 
+            <span id="address" th:text="${user.address}">exampleAddress</span>
+            <button onclick="showAddressForm()">Change Address</button>
+        </p>
+        <div id="addressForm" style="display:none;">
+            <input type="text" id="newAddressInput" placeholder="New Address">
+            <button onclick="updateAddress()">Update</button>
+        </div>
 
         <p><strong>Create Time:</strong> <span id="createTime" th:text="${user.createTime}">01/01/2021</span></p>
 
-        <p><strong>Address:</strong> <span id="address" th:text="${user.address}">1234 Example St, City</span>
-            <!-- Button to change address -->
-            <button onclick="document.getElementById('addressForm').style.display='block'">Change Address</button>
-            <form id="addressForm" action="/seckill/user/update/address" method="post" style="display:none;">
-                <input type="text" name="value" placeholder="New Address">
-                <button type="submit">Update</button>
-            </form>
-        </p>
-
-        <p><strong>Password: ********</strong> 
-            <!-- Button to change password -->
-            <button onclick="document.getElementById('passwordForm').style.display='block'">Change Password</button>
-            <form id="passwordForm" action="/seckill/user/update/password" method="post" style="display:none;">
-                <input type="password" name="value" placeholder="New Password">
-                <button type="submit">Update</button>
-            </form>
-        </p>
     </section>
 
     <section>
@@ -49,5 +52,6 @@
             <button class="logout-btn" type="submit">Logout</button>
         </form>
     </footer>
+    <script th:src="@{/js/profile.js}"></script>
 </body>
 </html>

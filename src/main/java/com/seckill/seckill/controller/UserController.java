@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -69,8 +71,12 @@ public class UserController {
     }
 
     @LoginRequired
-    @PostMapping("/update/{field}")
-    public String updateUserUsername(@PathVariable("field") String field, @RequestParam("value") String value) {
+    @PostMapping("/update")
+    @ResponseBody
+    public RespBean updateUserUsername(@RequestBody Map<String, String> map, @CookieValue("token") String tokenString) {
+        String field = map.get("field");
+        String value = map.get("value");
+
         User user = hostHolder.getUser();
         if (field == "username") {
             user.setUsername(value);
@@ -79,10 +85,7 @@ public class UserController {
         } else if (field == "address") {
             user.setAddress(value);
         }
-        RespBean respBean = userService.updateUser(user);
-        if (respBean.getCode() == 200) {
-            return "redirect:/user/profile";
-        } 
-        return "/error";
+        RespBean respBean = userService.updateUser(user, field, value, tokenString);
+        return respBean;
     }
 }

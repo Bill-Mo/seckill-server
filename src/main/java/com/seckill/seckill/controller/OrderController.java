@@ -68,31 +68,19 @@ public class OrderController {
     @PostMapping("/buyNow")
     @ResponseBody
     @Transactional
-    public ResponseEntity<?> checkout(@RequestBody Map<String, Object> orderRequest) {
-        int goodsId = (int) orderRequest.get("goodsId");
-        int amount = (int) orderRequest.get("amount");
+    public RespBean checkout(@RequestBody Map<String, Object> orderRequest) {
+        Integer goodsId = Integer.parseInt((String) orderRequest.get("goodsId"));
+        Integer amount = Integer.parseInt((String) orderRequest.get("amount"));
 
         User user = hostHolder.getUser();
         RespBean respBean = orderService.checkout(user.getId(), user.getAddress(), goodsId, amount);
-        
-        if (respBean.getCode() == 200) {
-            int orderId = (int) respBean.getObj();
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 200);
-            response.put("orderId", orderId);
-            return ResponseEntity.ok(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", respBean.getCode());
-            response.put("message", respBean.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+        return respBean;
     }
 
 
     @LoginRequired
-    @RequestMapping("/detail")
-    public String detail(@RequestParam("orderId") int orderId, Model model) {
+    @RequestMapping("/{orderId}")
+    public String detail(@PathVariable("orderId") int orderId, Model model) {
         User user = hostHolder.getUser();
         Order order = orderService.getOrder(user.getId(), orderId);
         List<OrderGoods> orderGoodsList = orderService.getOrderGoods(orderId);

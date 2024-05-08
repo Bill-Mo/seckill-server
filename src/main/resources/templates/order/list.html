@@ -22,7 +22,7 @@
         </ul>
         <div class="order-list">
             <div th:each="order : ${orders}">
-                <a class="order-item" th:href="@{/order/detail(orderId=${order.id})}">
+                <a class="order-item" th:href="@{/order/{orderId}(orderId=${order.id})}">
                     <div class="order-details">
                         <div>Order Number: 
                             <span th:text="${order.id}"></span>
