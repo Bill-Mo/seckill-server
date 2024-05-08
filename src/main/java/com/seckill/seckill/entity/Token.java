@@ -5,8 +5,8 @@ import java.util.Date;
 public class Token {
     
     private int id;
-    private User user;
-    private String token;
+    private String tokenString;
+    private int userId;
     private int status;
     private Date expired;
     public int getId() {
@@ -15,17 +15,17 @@ public class Token {
     public void setId(int id) {
         this.id = id;
     }
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-    public String getToken() {
-        return token;
+    public String getTokenString() {
+        return tokenString;
     }
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenString(String tokenString) {
+        this.tokenString = tokenString;
     }
     public int getStatus() {
         return status;
@@ -41,7 +41,7 @@ public class Token {
     }
     @Override
     public String toString() {
-        return "LoginToken [id=" + id + ", user=" + user + ", token=" + token + ", status=" + status
+        return "LoginToken [id=" + id + ", user=" + userId + ", token=" + tokenString + ", status=" + status
                 + ", expired=" + expired + "]";
     }
     

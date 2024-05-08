@@ -49,14 +49,14 @@ body {
     margin-top: 20px;
 }
 
-.product-info .buttons a {
+.product-info .buttons button {
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
-    width: 100px;
-    height: 20px;
+    width: 140px;
+    height: 40px;
     text-align: center;
 }
 
@@ -69,6 +69,7 @@ body {
     background-color: #fff200;
     color: black;
 }
+
 
 .product-description {
     padding: 20px 40px;

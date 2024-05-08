@@ -12,13 +12,13 @@
             <h2>Shipping Address</h2>
             <p th:text="${order.address}"></p>
             <!-- Show Edit button only if order is not paid (status != 1) -->
-            <button class="change-addr-btn" th:if="${order.status != 1}">Edit Address</button>
+            <button class="change-addr-btn" th:if="${order.status != 1}" th:data-order-id="${order.id}">Edit Address</button>
         </div>
         <div class="payment-section">
             <h2>Payment Method</h2>
             <div class="paymentMethod">
                 <!-- Fix payment method if order is paid (status == 1), else allow selection -->
-                <select th:disabled="${order.status == 1}">
+                <select class="payment-method-select" th:disabled="${order.status == 1}">
                     <option value="credit_card" th:selected="${order.paymentMethod == 'credit_card'}">Credit Card</option>
                     <option value="paypal" th:selected="${order.paymentMethod == 'paypal'}">PayPal</option>
                     <option value="apple_pay" th:selected="${order.paymentMethod == 'apple_pay'}">Apple Pay</option>
@@ -50,12 +50,12 @@
         </div>
         
         <div class="order-total">
-            <p>TOTAL: <span th:text="${'$' + order.totalPrice}"></span></p>
+            <p>TOTAL: <span th:text="${'$' + #numbers.formatDecimal(order.totalPrice, 0, 2)}"></span></p>
             <p>SHIP TO: <span th:text="${order.address}"></span></p>
             <!-- Hide Place Order button if order is paid (status == 1) -->
             <button class="place-order-btn" th:if="${order.status != 1}" th:orderId="${order.id}" onclick="placeOrder(this)">Place Order</button>
         </div>
     </div>
-    <script th:src="@{/js/placeOrder.js}"></script>
+    <script th:src="@{/js/order.js}"></script>
 </body>
 </html>

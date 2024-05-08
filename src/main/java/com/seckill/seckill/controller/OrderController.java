@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.seckill.seckill.annotation.LoginRequired;
 import com.seckill.seckill.entity.CartGoods;
@@ -59,6 +62,34 @@ public class OrderController {
         }
     }
 
+
+
+    @LoginRequired
+    @PostMapping("/buyNow")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<?> checkout(@RequestBody Map<String, Object> orderRequest) {
+        int goodsId = (int) orderRequest.get("goodsId");
+        int amount = (int) orderRequest.get("amount");
+
+        User user = hostHolder.getUser();
+        RespBean respBean = orderService.checkout(user.getId(), user.getAddress(), goodsId, amount);
+        
+        if (respBean.getCode() == 200) {
+            int orderId = (int) respBean.getObj();
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 200);
+            response.put("orderId", orderId);
+            return ResponseEntity.ok(response);
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", respBean.getCode());
+            response.put("message", respBean.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+
     @LoginRequired
     @RequestMapping("/detail")
     public String detail(@RequestParam("orderId") int orderId, Model model) {
@@ -102,5 +133,13 @@ public class OrderController {
         model.addAttribute("orderId", orderId);
         model.addAttribute("totalPrice", totalPrice);
         return "order/success";
+    }
+
+    @LoginRequired
+    @RequestMapping("/update/address")
+    @ResponseBody
+    public RespBean updateOrderAddress(@RequestParam("orderId") int orderId, @RequestParam("address") String address) {
+        RespBean respBean = orderService.updateOrderAddress(orderId, address);
+        return respBean;
     }
 }

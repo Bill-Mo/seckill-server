@@ -44,13 +44,21 @@ public class OrderService {
         Order order = new Order();
 
         // Compute total price
-        int totalPrice = 0;
+        double totalPrice = 0;
         for (CartGoods cartGoods : cart) {
             if (cartGoods.getStatus() == 1) {
                 totalPrice += cartGoods.getPrice() * cartGoods.getAmount();
             }
         }
 
+        if (address == null || address.length() == 0) {
+            return RespBean.error(RespBeanEnum.INVALID_USER);
+        }
+
+        if (totalPrice == 0 || cart.size() == 0){
+            return RespBean.error(RespBeanEnum.INVALID_CART);
+        }
+        
         // Set and insert order
         order.setUserId(userId);
         order.setTotalPrice(totalPrice);
@@ -63,7 +71,7 @@ public class OrderService {
 
                 // Add goods into order, update goods stock, and remove goods from cart, 
                 int result = orderMapper.insertOrderGoods(order.getId(), cartGoods.getId(), cartGoods.getAmount(), cartGoods.getPrice());
-                RespBean reduceStock = goodsService.updateGoodsStock(userId, -cartGoods.getAmount());
+                RespBean reduceStock = goodsService.updateGoodsStock(cartGoods.getId(), -cartGoods.getAmount());
                 if (result != 1 || reduceStock.getCode() != 200) {
                     return RespBean.error(RespBeanEnum.ORDER_FAIL);
                 }
@@ -71,6 +79,37 @@ public class OrderService {
             }
         }
 
+        return RespBean.success(order.getId());
+    }
+
+    @Transactional
+    public RespBean checkout(int userId, String address, int goodsId, int amount) {
+        Order order = new Order();
+        Goods goods = goodsService.findGoodsById(goodsId);
+        if (goods == null) {
+            return RespBean.error(RespBeanEnum.GOODS_NOT_FOUND);
+        }
+
+        // Compute total price
+        double totalPrice = goods.getPrice() * amount;
+
+        if (address == null || address.length() == 0) {
+            return RespBean.error(RespBeanEnum.INVALID_USER);
+        }
+        
+        // Set and insert order
+        order.setUserId(userId);
+        order.setTotalPrice(totalPrice);
+        order.setAddress(address);
+        order.setCreateTime(new Date());
+        orderMapper.insertOrder(order);
+
+        // Add goods into order, update goods stock, and remove goods from cart, 
+        int result = orderMapper.insertOrderGoods(order.getId(), goods.getId(), amount, goods.getPrice());
+        RespBean reduceStock = goodsService.updateGoodsStock(goods.getId(), -amount);
+        if (result != 1 || reduceStock.getCode() != 200) {
+            return RespBean.error(RespBeanEnum.ORDER_FAIL);
+        }
         return RespBean.success(order.getId());
     }
 
@@ -97,5 +136,13 @@ public class OrderService {
             return RespBean.success(order.getTotalPrice());
         }
         return RespBean.error(RespBeanEnum.ORDER_FAIL);
+    }
+
+    public RespBean updateOrderAddress(int orderId, String address) {
+        int result = orderMapper.updateOrderAddress(orderId, address);
+        if (result == 1) {
+            return RespBean.success();
+        }
+        return RespBean.error(RespBeanEnum.UPDATE_ORDER_ERROR);
     }
 }

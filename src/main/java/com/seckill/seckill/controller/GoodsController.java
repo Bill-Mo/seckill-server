@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,9 +28,10 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public String detail(Model model, @PathVariable("id") int id) {
         model.addAttribute("goods", goodsService.findGoodsById(id));
+        System.out.println(goodsService.findGoodsById(id));
         return "goods/detail";
     }
 

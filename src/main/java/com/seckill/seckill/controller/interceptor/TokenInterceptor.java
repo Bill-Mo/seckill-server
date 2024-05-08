@@ -3,6 +3,7 @@ package com.seckill.seckill.controller.interceptor;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
+@Order(1)
 public class TokenInterceptor implements HandlerInterceptor {
     
     @Autowired
@@ -37,10 +39,12 @@ public class TokenInterceptor implements HandlerInterceptor {
                     if (token != null && token.getStatus() == 0 && token.getExpired().after(new Date())) {
                         System.out.println("Token will expire in " + (token.getExpired().getTime() - new Date().getTime()) / 1000 + " seconds");
                         // Search for user
-                        User user = token.getUser();
+                        User user = userService.findUserById(token.getUserId());
                         // Save user status
                         hostHolder.setUser(user);
-                    } 
+                    } else {
+                        hostHolder.clear();
+                    }
                 }
                 return true;
     }

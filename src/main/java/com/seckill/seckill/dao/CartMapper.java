@@ -18,4 +18,6 @@ public interface CartMapper {
     int deleteCartGoods(int userId, int goodsId);
 
     int updateCartGoodsStatus(int userId, int goodsId);
+
+    CartGoods selectCartGoodsByGoodsId(int userId, int goodsId);
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>购物车详情</title>
+    <title>Shopping Cart Detail</title>
     <link rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 <body>
@@ -11,35 +11,35 @@
         <div class="cart-header">
             <div class="select-all">
                 <input type="checkbox" id="selectAll">
-                <label for="selectAll">全选</label>
+                <label for="selectAll">Select All</label>
             </div>
-            <div class="header-item-info">商品名称</div>
-            <div class="header-item">单价</div>
-            <div class="header-item">数量</div>
-            <div class="header-item">金额</div>
-            <div class="header-item">操作</div>
+            <div class="header-item-info">Product Info</div>
+            <div class="header-item">Price</div>
+            <div class="header-item">Quantity</div>
+            <div class="header-item">Total</div>
+            <div class="header-item">Action</div>
         </div>
         <div class="cart-items">
             <div th:each="item, iterStat : ${cart}">
                 <div class="cart-item" th:data-goods-id="${item.id}">
                     <div class="item-select">
-                        <input type="checkbox" th:id="'item-' + ${iterStat.index}">
+                        <input type="checkbox" th:id="'item-' + ${iterStat.index}" th:checked="${item.status==1?true:false}">
                     </div>
                     <div class="item-info">
                         <img class="item-image" th:src="@{/image/iphone.jfif}" alt="商品图片">
                         <div class="item-name" th:text="${item.name}">商品名称</div>
                     </div>
-                    <div class="item-price" th:text="${'$' + item.price}">$99.99</div>
+                    <div class="item-price" th:text="${'$' + #numbers.formatDecimal(item.price, 0, 2)}">$99.99</div>
                     <div class="item-amount">
                         <div class="amount-control">
-                            <button class="amount-btn decrease">-</button>
-                            <input type="number" th:value="${item.amount}" min="1" class="amount-input" th:data-original-amount="${item.amount}">
-                            <button class="amount-btn increase">+</button>
+                            <button class="amount-btn decrease" th:attr="disabled=${item.amount <= 1}">-</button>
+                            <input type="number" th:value="${item.amount}" min="1" th:max="${item.purchaseLimit}" class="amount-input" th:data-purchase-limit="${item.purchaseLimit}" th:data-stock="${item.stock}" th:data-original-amount="${item.amount}">
+                            <button class="amount-btn increase" th:attr="disabled=${item.amount >= item.purchaseLimit&&item.amount >= item.stock}">+</button>
                         </div>
                     </div>
-                    <div class="item-total" th:text="${'$' + item.price * item.amount}">$99.99</div>
+                    <div class="item-total" th:text="${'$' + #numbers.formatDecimal(item.price * item.amount, 0, 2)}">$99.99</div>
                     <div class="item-remove">
-                        <button class="remove-button">删除</button>
+                        <button class="remove-button">Remove</button>
                     </div>
                 </div>
             </div>
@@ -47,15 +47,15 @@
         <div class="cart-footer">
             <div class="footer-left">
                 <input type="checkbox" id="selectAllFooter">
-                <label for="selectAllFooter">全选</label>
-                <button>删除选中项</button>
+                <label for="selectAllFooter">Select All</label>
+                <button>Delete Selected Products</button>
             </div>
             <div class="footer-middle">
-                已选择 <span id="selectedCount">0</span> 件商品
+                Selected <span id="selectedCount">0</span> Items
             </div>
             <div class="footer-right">
-                总价格: <span id="totalPrice">$0.00</span>
-                <button id="checkout-btn">结算</button>
+                Total: <span id="totalPrice">$0.00</span>
+                <button id="checkout-btn">Checkout</button>
             </div>
         </div>
     </div>

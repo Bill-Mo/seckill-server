@@ -1,16 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>个人中心</title>
+    <title>User Profile</title>
     <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
 <body>
-<div class="profile-container">
-    <div class="username-section">
-        <h3>用户名: <span th:text="${loginUser.username}"></span></h3>
-    </div>
-    <a th:href="@{/user/orders}" class="order-button">查看我的订单</a>
-</div>
+    <div th:replace="navbar.html"></div>
+    <section>
+        <h2>Profile Details</h2>
+        <p><strong>Username:</strong> <span id="username" th:text="${user.username}">exampleUser</span>
+            <!-- Button to change username -->
+            <button onclick="document.getElementById('usernameForm').style.display='block'">Change Username</button>
+            <form id="usernameForm" action="/seckill/user/update/username" method="post" style="display:none;">
+                <input type="text" name="value" placeholder="New Username">
+                <button type="submit">Update</button>
+            </form>
+        </p>
+
+        <p><strong>Create Time:</strong> <span id="createTime" th:text="${user.createTime}">01/01/2021</span></p>
+
+        <p><strong>Address:</strong> <span id="address" th:text="${user.address}">1234 Example St, City</span>
+            <!-- Button to change address -->
+            <button onclick="document.getElementById('addressForm').style.display='block'">Change Address</button>
+            <form id="addressForm" action="/seckill/user/update/address" method="post" style="display:none;">
+                <input type="text" name="value" placeholder="New Address">
+                <button type="submit">Update</button>
+            </form>
+        </p>
+
+        <p><strong>Password: ********</strong> 
+            <!-- Button to change password -->
+            <button onclick="document.getElementById('passwordForm').style.display='block'">Change Password</button>
+            <form id="passwordForm" action="/seckill/user/update/password" method="post" style="display:none;">
+                <input type="password" name="value" placeholder="New Password">
+                <button type="submit">Update</button>
+            </form>
+        </p>
+    </section>
+
+    <section>
+        <h2>Order History</h2>
+        <!-- Link to the order history page -->
+        <a th:href="@{/user/orders}">View Order History</a>
+    </section>
+    <footer>
+        <form action="/seckill/logout" method="post">
+            <button class="logout-btn" type="submit">Logout</button>
+        </form>
+    </footer>
 </body>
 </html>

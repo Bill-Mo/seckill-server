@@ -10,6 +10,8 @@ import lombok.ToString;
 public enum RespBeanEnum {
     SUCCESS(200, "SUCCESS"),
 
+    LOGIN_REQUIRE(401, "Please login first"),
+
     ERROR(500, "SERVER ERROR"),
 
     LOGIN_ERROR(501, "Username or password is incorrect"),
@@ -17,9 +19,15 @@ public enum RespBeanEnum {
 
     EMPTY_STOCK(510, "Out of stock"),
     REPEATE_ERROR(511, "You have already bought this item"),
-    ORDER_FAIL(512, "Order failed"),
-
+    GOODS_NOT_FOUND(512, "Goods not found"),
+    
     CART_ERROR(520, "Cart error"),
+    INVALID_CART(521, "Invalid cart"),
+    UPDATE_CART_ERROR(522, "Update cart failed"),
+
+    INVALID_USER(530, "Invalid user information"),
+    ORDER_FAIL(531, "Order failed"),
+    UPDATE_ORDER_ERROR(532, "Update order failed"),
     ;
 
     private final Integer code;

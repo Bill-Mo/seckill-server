@@ -18,7 +18,7 @@
     </update>
 
     <select id="selectOrderGoods">
-        select g.id, name, g.price, stock, description, image, og.id, amount, og.price
+        select g.id, name, g.price, stock, sales, purchase_limit, description, image, og.id, amount, og.price
         from goods g
         join order_goods og
         on g.id = og.goods_id
@@ -68,6 +68,13 @@
         set status = 1, payment_time = now(), payment_method = #{paymentMethod}
         where user_id = #{userId}
         and id = #{orderId}
+        ;
+    </update>
+
+    <update id="updateOrderAddress">
+        update orders
+        set address = #{address}
+        where id = #{orderId}
         ;
     </update>
 </mapper>

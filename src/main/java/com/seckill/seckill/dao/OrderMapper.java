@@ -23,4 +23,6 @@ public interface OrderMapper {
     int selectOrderRows(int userId, int mode);
 
     int placeOrder(String paymentMethod, int userId, int orderId);
+
+    int updateOrderAddress(int orderId, String address);
 }

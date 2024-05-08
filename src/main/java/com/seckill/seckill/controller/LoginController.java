@@ -10,11 +10,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.seckill.seckill.annotation.LoginRequired;
+import com.seckill.seckill.entity.User;
 import com.seckill.seckill.service.UserService;
+import com.seckill.seckill.util.HostHolder;
+import com.seckill.seckill.util.SeckillUtil;
 import com.seckill.seckill.vo.RespBean;
 
 @Controller
 public class LoginController {
+
+    @Autowired
+    private HostHolder hostHolder;
         
         private static final Logger logger = org.slf4j.LoggerFactory.getLogger(LoginController.class);
         @Autowired
@@ -47,5 +54,13 @@ public class LoginController {
                 model.addAttribute("error", respBean.getMessage());
                 return "/login";
             }
+        }
+
+        @LoginRequired
+        @RequestMapping("/logout")
+        public String logout(HttpServletRequest request) {
+            User user = hostHolder.getUser();
+            RespBean respBean = userService.logout(user.getId());
+            return "redirect:/toLogin";
         }
 }

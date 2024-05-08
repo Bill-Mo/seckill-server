@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.seckill.seckill.entity.Goods;
 import com.seckill.seckill.entity.Page;
@@ -43,5 +44,15 @@ public class HomeController {
         model.addAttribute("goodsList", goodsList);
         model.addAttribute("seckillGoodsList", seckillGoodsList);
         return "index";
+    }
+
+    @RequestMapping(path = "/error", method = RequestMethod.GET)
+    public String getErrorPage() {
+        return "/error/500";
+    }
+
+    @RequestMapping(path = "/denied", method = RequestMethod.GET)
+    public String getDeniedPage() {
+        return "/error/404";
     }
 }

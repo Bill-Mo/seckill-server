@@ -1,6 +1,7 @@
 package com.seckill.seckill.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.seckill.seckill.annotation.LoginRequired;
 import com.seckill.seckill.entity.CartGoods;
@@ -23,6 +27,7 @@ import com.seckill.seckill.service.CartService;
 import com.seckill.seckill.service.GoodsService;
 import com.seckill.seckill.util.HostHolder;
 import com.seckill.seckill.vo.RespBean;
+import com.seckill.seckill.vo.RespBeanEnum;
 
 
 @Controller
@@ -38,19 +43,25 @@ public class CartController {
     @Autowired
     GoodsService goodsService;
 
-    @RequestMapping("/add")
     @LoginRequired
-    public String addToCart(@RequestParam("id") int goodsId, @RequestParam("amount") int amount){
+    @PostMapping("/add")
+    @ResponseBody
+    public RespBean addToCart(@RequestBody Map<String, Object> cartItemRequest) {
+        Integer goodsId = Integer.parseInt((String) cartItemRequest.get("goodsId"));
+        Integer amount = Integer.parseInt((String) cartItemRequest.get("amount"));
+
         User user = hostHolder.getUser();
-        cartService.addToCart(goodsId, amount, user.getId());
-        return "redirect:/cart/detail";
+        RespBean respBean = cartService.addToCart(user.getId(), goodsId, amount);
+        System.out.println(respBean);
+        return respBean;
     }
 
     @RequestMapping("/detail")
     @LoginRequired
     public String detail(Model model) {
         List<CartGoods> cart = cartService.getCart(hostHolder.getUser().getId());
-        
+        for (CartGoods goods : cart) {
+        }
         model.addAttribute("cart", cart);
         return "/cart";
     }
@@ -65,10 +76,8 @@ public class CartController {
     @RequestMapping("/update")
     @LoginRequired
     public String update(@RequestParam("id") int goodsId, @RequestParam("amount") int amount) {
-        // int goodsId = cartItemRequest.getId();
-        // int amount = cartItemRequest.getAmount();
         System.out.println("goodsId: " + goodsId + " amount: " + amount + " userId: " + hostHolder.getUser().getId());
-        cartService.updateCartGoodsAmount(goodsId, amount, hostHolder.getUser().getId());
+        cartService.updateCartGoodsAmount(hostHolder.getUser().getId(), goodsId, amount);
         return "redirect:/cart/detail";
     }
 

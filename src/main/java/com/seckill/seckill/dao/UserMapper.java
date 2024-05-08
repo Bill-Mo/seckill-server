@@ -6,11 +6,11 @@ import com.seckill.seckill.entity.User;
 @Mapper
 public interface UserMapper {
     
-    User selectByEmail(String email);
+    User selectUserByEmail(String email);
+
+    User selectUserById(int userId);
 
     int insertUser(User user);
 
-    int updatePassword(int userId, String password);
-
-    int updateAddress(int userId, String address);
+    int updateUser(User user);
 }

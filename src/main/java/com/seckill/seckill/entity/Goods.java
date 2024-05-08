@@ -19,7 +19,10 @@ public class Goods {
     private String name;
     private double price;
     private int stock;
+    private int sales;
+    private int purchaseLimit;
     private String description;
     private String image;
+    private String formattedSales;
     private boolean seckill = false;
 }

@@ -1,10 +1,9 @@
 package com.seckill.seckill.vo;
 
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.alibaba.fastjson.JSONObject;
 
 @Data
 @NoArgsConstructor
@@ -29,5 +28,9 @@ public class RespBean {
 
     public static RespBean error(RespBeanEnum respBeanEnum, Object obj) {
         return new RespBean(respBeanEnum.getCode(), respBeanEnum.getMessage(), obj);
+    }
+
+    public String toJsonString() {
+        return JSONObject.toJSONString(this);
     }
 }

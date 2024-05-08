@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
 import com.seckill.seckill.dao.UserMapper;
 import com.seckill.seckill.entity.Token;
 import com.seckill.seckill.entity.User;
@@ -16,6 +15,7 @@ import com.seckill.seckill.vo.RespBeanEnum;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +43,7 @@ public class UserService {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
         
-        User user = userMapper.selectByEmail(email);
+        User user = userMapper.selectUserByEmail(email);
         if (user == null) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
@@ -53,21 +53,21 @@ public class UserService {
 
         // generate token
         Token token = new Token();
-        token.setUser(user);
-        token.setToken(SeckillUtil.generateUUID());
+        token.setUserId(user.getId());
+        token.setTokenString(SeckillUtil.generateUUID());
         token.setStatus(0);
         token.setExpired(new Date(System.currentTimeMillis() + (long) expiredSec * 1000));
 
         // set token in session and cookie
         // request.getSession().setAttribute(token.getToken(), user);
-        Cookie cookie = new Cookie("token", token.getToken());
+        Cookie cookie = new Cookie("token", token.getTokenString());
         cookie.setPath(contextPath);
         cookie.setMaxAge(expiredSec);
         response.addCookie(cookie);
 
         // set token in redis
-        String redisKey = RedisUtil.getTokenKey(token.getToken());
-        System.out.println(token.getToken());
+        String redisKey = RedisUtil.getTokenKey(token.getTokenString());
+        System.out.println(user.getId());
         redisTemplate.opsForValue().set(redisKey, token);
 
         return RespBean.success();
@@ -77,10 +77,44 @@ public class UserService {
         return (Token) redisTemplate.opsForValue().get(RedisUtil.getTokenKey(tokenString));
     }
 
-    public RespBean updateAddress(int userId, String address) {
-        if (userMapper.updateAddress(userId, address) == 1) {
+    public RespBean logout(int userId) {
+        clearCache(userId);
+        return RespBean.success();
+    }
+
+    public RespBean updateUser(User user) {
+        if (userMapper.updateUser(user) == 1) {
+            clearCache(user.getId());
             return RespBean.success();
         }
         return RespBean.error(RespBeanEnum.UPDATE_INFO_ERROR);
+    }
+
+    public User findUserById(int userId) {
+        User user = getCache(userId);
+        if (user == null) {
+            user = initCache(userId);
+        }
+        return user;
+    }
+
+    // Get value from cache
+    private User getCache(int userId) {
+        String redisKey = RedisUtil.getUserKey(userId);
+        return (User) redisTemplate.opsForValue().get(redisKey);
+    }
+
+    // Initialize cache
+    private User initCache(int userId) {
+        User user = userMapper.selectUserById(userId);
+        String redisKey = RedisUtil.getUserKey(userId);
+        redisTemplate.opsForValue().set(redisKey, user, 3600, TimeUnit.SECONDS);
+        return user;
+    }
+
+    // Clear cache when data updated
+    private void clearCache(int userId) {
+        String redisKey = RedisUtil.getUserKey(userId);
+        redisTemplate.delete(redisKey);
     }
 }

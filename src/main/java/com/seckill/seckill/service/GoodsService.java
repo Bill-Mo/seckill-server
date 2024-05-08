@@ -20,7 +20,11 @@ public class GoodsService {
     private GoodsMapper goodsMapper;
 
     public List<Goods> findGoods(int offset, int limit) {
-        return goodsMapper.selectGoods(offset, limit); 
+        List<Goods> goodsList = goodsMapper.selectGoods(offset, limit); 
+        for (Goods goods : goodsList) {
+            goods.setFormattedSales(formatSales(goods.getSales()));
+        }
+        return goodsList;
     }
 
     public List<SeckillGoods> findSeckillGoods(List<Integer> goodsIds) {
@@ -30,11 +34,15 @@ public class GoodsService {
     public Goods findGoodsById(int goodsId) {
         List<Integer> goodsIds = new ArrayList<>();
         goodsIds.add(goodsId);
-        return goodsMapper.selectGoodsById(goodsIds).get(0);
+        return findGoodsById(goodsIds).get(0);
     }
 
     public List<Goods> findGoodsById(List<Integer> goodsIds) {
-        return goodsMapper.selectGoodsById(goodsIds);
+        List<Goods> goodsList = goodsMapper.selectGoodsById(goodsIds);
+        for (Goods goods : goodsList) {
+            goods.setFormattedSales(formatSales(goods.getSales()));
+        }
+        return goodsList;
     }
 
     public int findGoodsRows() {
@@ -57,5 +65,28 @@ public class GoodsService {
 
     public int updateSeckillGoodsStock(int id, int stock) {
         return goodsMapper.updateSeckillGoodsStock(id, stock);
+    }
+
+    
+    public String formatSales(int sales) {
+        if (9 < sales && sales < 99) {
+            return sales / 10 + "0+";
+        } else if (99 < sales && sales < 999) {
+            return sales / 100 + "00+";
+        } else if (999 < sales && sales < 9999) {
+            return sales / 1000 + "k+";
+        } else if (9999 < sales && sales < 99999) {
+            return sales / 10000 + "0k+";
+        } else if (99999 < sales && sales < 999999) {
+            return sales / 100000 + "00k+";
+        } else if (999999 < sales && sales < 9999999) {
+            return sales / 1000000 + "m+";
+        } else if (9999999 < sales && sales < 99999999) {
+            return sales / 10000000 + "0m+";
+        } else if (99999999 < sales && sales < 999999999) {
+            return sales / 100000000 + "00m+";
+        } else {
+            return sales + "";
+        }
     }
 }

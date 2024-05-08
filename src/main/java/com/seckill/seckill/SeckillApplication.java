@@ -16,7 +16,9 @@ public class SeckillApplication {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-		SpringApplication.run(SeckillApplication.class, args);
+
+        SpringApplication.run(SeckillApplication.class, args);
+		
 	}
 
 }

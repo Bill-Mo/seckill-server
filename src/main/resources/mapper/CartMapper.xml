@@ -4,7 +4,7 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seckill.seckill.dao.CartMapper">
     <select id="selectCartGoods" resultType="com.seckill.seckill.entity.CartGoods">
-        select g.id, name, price, stock, description, image, user_id, amount, c.create_time, status
+        select g.id, name, price, stock, sales, purchase_limit, description, image, user_id, amount, c.create_time, status
         from goods g
         join cart c
         on g.id = c.goods_id
@@ -14,11 +14,21 @@
 
     <update id="updateCartGoodsAmount">
         update cart
-        set amount = amount + #{amount}
+        set amount = #{amount}
         where user_id = #{userId}
         and goods_id = #{goodsId}
         ;
     </update>
+
+    <select id="selectCartGoodsByGoodsId">
+        select g.id, name, price, stock, sales, purchase_limit, description, image, user_id, amount, c.create_time, status
+        from goods g
+        join cart c
+        on g.id = c.goods_id
+        where user_id = #{userId}
+        and goods_id = #{goodsId}
+        ;
+    </select>
 
     <update id="insertCartGoods">
         insert into cart (user_id, goods_id, amount, create_time, status)
@@ -35,10 +45,10 @@
 
     <update id="updateCartGoodsStatus">
         update cart
-        set status = 1
-            <!-- WHEN status = 0 THEN 1
+        set status = CASE
+            WHEN status = 0 THEN 1
             WHEN status = 1 THEN 0
-        END -->
+        END
         where user_id = #{userId}
         and goods_id = #{goodsId}
     </update>
