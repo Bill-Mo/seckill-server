@@ -32,13 +32,13 @@ public class LoginController {
 
         @RequestMapping("/toLogin")
         public String toLogin() {
-            return "/login";
+            return "login";
         }
 
         @RequestMapping("/login")
         public String login(String email, String password, boolean rememberMe, Model model, HttpServletRequest request, HttpServletResponse response) {
             if (email == null && password == null) {
-                return "/login";
+                return "login";
             }
 
             int expiredSec;
@@ -55,7 +55,7 @@ public class LoginController {
                 return "redirect:/index";
             } else {
                 model.addAttribute("error", respBean.getMessage());
-                return "/login";
+                return "login";
             }
         }
 

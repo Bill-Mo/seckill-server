@@ -63,7 +63,7 @@ public class CartController {
     public String detail(Model model) {
         List<CartGoods> cart = cartService.getCart(hostHolder.getUser().getId());
         model.addAttribute("cart", cart);
-        return "/cart";
+        return "cart";
     }
 
     @PostMapping("/{id}")
