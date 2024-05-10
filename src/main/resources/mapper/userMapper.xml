@@ -20,8 +20,8 @@
     </select>
 
     <insert id="insertUser" parameterType="com.seckill.seckill.entity.User" keyProperty="id">
-        insert into user (email, password, username, address)
-        values (#{username}, #{password}, #{username}, #{address})
+        insert into user(email, username, password, address, create_time)
+        values(#{email}, #{username}, #{password}, #{address}, #{createTime})
     </insert>
 
     <update id="updateUsername">

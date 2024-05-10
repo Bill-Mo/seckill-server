@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <div class="container">
+        <h2>Register</h2>
+        <form th:action="@{/doRegister}" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <label for="rePassword">Re-enter Password:</label>
+            <input type="password" id="rePassword" name="rePassword" required>
+            <div id="passwordMatchError"></div>
+            <br>
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+            <br>
+            <div class="invalid-feedback" style="color: red;" th:text="${error}"></div>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a th:href="@{/login}">Login here!</a></p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/js/register.js}"></script>
+</body>
+</html>

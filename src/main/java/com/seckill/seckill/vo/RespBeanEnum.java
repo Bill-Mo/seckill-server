@@ -33,6 +33,9 @@ public enum RespBeanEnum {
     INVALID_USER(530, "Invalid user information"),
     ORDER_FAIL(531, "Order failed"),
     UPDATE_ORDER_ERROR(532, "Update order failed"),
+
+    REGISTER_ERROR(540, "Register failed"),
+    DUPLICATE_EMAIL(541, "Email already exists!"),
     ;
 
     private final Integer code;

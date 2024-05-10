@@ -73,6 +73,21 @@ public class UserService {
         return RespBean.success();
     }
 
+    public RespBean register(User user) {
+        if (StringUtils.isBlank(user.getEmail()) || StringUtils.isBlank(user.getPassword())) {
+            return RespBean.error(RespBeanEnum.REGISTER_ERROR);
+        }
+        if (userMapper.selectUserByEmail(user.getEmail()) != null) {
+            return RespBean.error(RespBeanEnum.DUPLICATE_EMAIL);
+        }
+
+        int result = userMapper.insertUser(user);
+        if (result == 1) {
+            return RespBean.success();
+        }
+        return RespBean.error(RespBeanEnum.REGISTER_ERROR);
+    }
+
     public Token findToken(String tokenString) {
         return (Token) redisTemplate.opsForValue().get(RedisUtil.getTokenKey(tokenString));
     }
