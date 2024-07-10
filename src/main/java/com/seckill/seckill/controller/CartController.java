@@ -2,25 +2,17 @@ package com.seckill.seckill.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.seckill.seckill.annotation.LoginRequired;
 import com.seckill.seckill.entity.CartGoods;
@@ -29,8 +21,6 @@ import com.seckill.seckill.service.CartService;
 import com.seckill.seckill.service.GoodsService;
 import com.seckill.seckill.util.HostHolder;
 import com.seckill.seckill.vo.RespBean;
-import com.seckill.seckill.vo.RespBeanEnum;
-
 
 @Controller
 @RequestMapping("/cart")
@@ -41,7 +31,7 @@ public class CartController {
 
     @Autowired
     CartService cartService;
-    
+
     @Autowired
     GoodsService goodsService;
 
@@ -80,7 +70,7 @@ public class CartController {
 
         return respBean;
     }
-    
+
     @DeleteMapping("/{id}")
     @LoginRequired
     @ResponseBody

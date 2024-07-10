@@ -1,11 +1,9 @@
 package com.seckill.seckill.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -20,12 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.seckill.seckill.annotation.LoginRequired;
 import com.seckill.seckill.entity.Order;
 import com.seckill.seckill.entity.OrderGoods;
-import com.seckill.seckill.entity.User;
-import com.seckill.seckill.service.CartService;
 import com.seckill.seckill.service.OrderService;
-import com.seckill.seckill.util.HostHolder;
 import com.seckill.seckill.vo.RespBean;
-
 
 @Controller
 @RequestMapping("/order")
@@ -33,12 +27,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private HostHolder hostHolder;
-
-    @Autowired
-    private CartService cartService;
 
     @RequestMapping("")
     @LoginRequired
@@ -59,7 +47,6 @@ public class OrderController {
         RespBean respBean = orderService.checkout(goodsId, amount);
         return respBean;
     }
-
 
     @LoginRequired
     @GetMapping("/{orderId}")
@@ -84,7 +71,8 @@ public class OrderController {
 
     @LoginRequired
     @GetMapping("/success")
-    public String success(Model model, @RequestParam("orderId") int orderId, @RequestParam("totalPrice") double totalPrice) {
+    public String success(Model model, @RequestParam("orderId") int orderId,
+            @RequestParam("totalPrice") double totalPrice) {
         model.addAttribute("orderId", orderId);
         model.addAttribute("totalPrice", totalPrice);
         return "order/success";

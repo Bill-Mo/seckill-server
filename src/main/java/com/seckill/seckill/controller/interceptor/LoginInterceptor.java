@@ -11,11 +11,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.seckill.seckill.annotation.LoginRequired;
 import com.seckill.seckill.util.HostHolder;
-import com.seckill.seckill.util.SeckillUtil;
 import com.seckill.seckill.vo.RespBean;
 import com.seckill.seckill.vo.RespBeanEnum;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,7 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             LoginRequired loginRequired = method.getAnnotation(LoginRequired.class);
-            
+
             if (loginRequired != null) {
                 System.out.println("Login required");
                 if (hostHolder.getUser() == null) {

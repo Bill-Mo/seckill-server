@@ -1,8 +1,5 @@
 package com.seckill.seckill.entity;
 
-import java.util.Date;
-
-import javafx.beans.binding.BooleanExpression;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,19 +1,13 @@
 package com.seckill.seckill.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +22,6 @@ import com.seckill.seckill.entity.User;
 import com.seckill.seckill.service.OrderService;
 import com.seckill.seckill.service.UserService;
 import com.seckill.seckill.util.HostHolder;
-import com.seckill.seckill.util.SeckillUtil;
 import com.seckill.seckill.vo.RespBean;
 
 @Controller
@@ -63,7 +56,7 @@ public class UserController {
             List<OrderGoods> orderGoodsList = orderService.getOrderGoods(order.getId());
             order.setOrderGoods(orderGoodsList);
         }
-        
+
         model.addAttribute("orders", orders);
         model.addAttribute("mode", mode);
         return "order/list";

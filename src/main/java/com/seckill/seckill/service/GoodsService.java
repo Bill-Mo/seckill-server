@@ -1,7 +1,6 @@
 package com.seckill.seckill.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class GoodsService {
     private GoodsMapper goodsMapper;
 
     public List<Goods> findGoods(int offset, int limit) {
-        List<Goods> goodsList = goodsMapper.selectGoods(offset, limit); 
+        List<Goods> goodsList = goodsMapper.selectGoods(offset, limit);
         for (Goods goods : goodsList) {
             goods.setFormattedSales(formatSales(goods.getSales()));
         }
@@ -86,7 +85,6 @@ public class GoodsService {
         return goodsMapper.updateSeckillGoodsStock(id, stock);
     }
 
-    
     public String formatSales(int sales) {
         if (9 < sales && sales < 99) {
             return sales / 10 + "0+";

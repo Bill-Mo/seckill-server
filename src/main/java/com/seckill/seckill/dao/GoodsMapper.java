@@ -1,11 +1,12 @@
 package com.seckill.seckill.dao;
-import java.util.Date;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.seckill.seckill.entity.Goods;
 import com.seckill.seckill.entity.SeckillGoods;
+
 @Mapper
 public interface GoodsMapper {
 

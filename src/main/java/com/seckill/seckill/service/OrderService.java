@@ -1,13 +1,10 @@
 package com.seckill.seckill.service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.slf4j.Logger;
+// import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +14,6 @@ import com.seckill.seckill.entity.Goods;
 import com.seckill.seckill.entity.Order;
 import com.seckill.seckill.entity.OrderGoods;
 import com.seckill.seckill.util.HostHolder;
-import com.seckill.seckill.util.RedisUtil;
 import com.seckill.seckill.vo.RespBean;
 import com.seckill.seckill.vo.RespBeanEnum;
 
@@ -25,8 +21,9 @@ import com.seckill.seckill.vo.RespBeanEnum;
 public class OrderService {
 
     // logger
-    @Autowired
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderService.class);
+    // @Autowired
+    // private static final Logger log =
+    // org.slf4j.LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     private OrderMapper orderMapper;
@@ -39,9 +36,6 @@ public class OrderService {
 
     @Autowired
     private HostHolder hostHolder;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public RespBean checkout() {
@@ -64,10 +58,10 @@ public class OrderService {
             return RespBean.error(RespBeanEnum.INVALID_USER);
         }
 
-        if (totalPrice == 0 || cart.size() == 0){
+        if (totalPrice == 0 || cart.size() == 0) {
             return RespBean.error(RespBeanEnum.INVALID_CART);
         }
-        
+
         // Set and insert order
         order.setUserId(userId);
         order.setTotalPrice(totalPrice);
@@ -78,8 +72,9 @@ public class OrderService {
         for (CartGoods cartGoods : cart) {
             if (cartGoods.getStatus() == 1) {
 
-                // Add goods into order, update goods stock, and remove goods from cart, 
-                int result = orderMapper.insertOrderGoods(order.getId(), cartGoods.getId(), cartGoods.getAmount(), cartGoods.getPrice());
+                // Add goods into order, update goods stock, and remove goods from cart,
+                int result = orderMapper.insertOrderGoods(order.getId(), cartGoods.getId(), cartGoods.getAmount(),
+                        cartGoods.getPrice());
                 RespBean reduceStock = goodsService.updateGoodsStock(cartGoods.getId(), -cartGoods.getAmount());
                 RespBean increaseSales = goodsService.updateGoodsSales(cartGoods.getId(), cartGoods.getAmount());
                 if (result != 1 || reduceStock.getCode() != 200 || increaseSales.getCode() != 200) {
@@ -109,7 +104,7 @@ public class OrderService {
         if (address == null || address.length() == 0) {
             return RespBean.error(RespBeanEnum.INVALID_USER);
         }
-        
+
         // Set and insert order
         order.setUserId(userId);
         order.setTotalPrice(totalPrice);
@@ -117,13 +112,13 @@ public class OrderService {
         order.setCreateTime(new Date());
         orderMapper.insertOrder(order);
 
-        // Add goods into order, update goods stock, and remove goods from cart, 
+        // Add goods into order, update goods stock, and remove goods from cart,
         int result = orderMapper.insertOrderGoods(order.getId(), goods.getId(), amount, goods.getPrice());
         RespBean reduceStock = goodsService.updateGoodsStock(goods.getId(), -amount);
         RespBean increaseSales = goodsService.updateGoodsSales(goods.getId(), amount);
-                if (result != 1 || reduceStock.getCode() != 200 || increaseSales.getCode() != 200) {
-                    return RespBean.error(RespBeanEnum.ORDER_FAIL);
-                }
+        if (result != 1 || reduceStock.getCode() != 200 || increaseSales.getCode() != 200) {
+            return RespBean.error(RespBeanEnum.ORDER_FAIL);
+        }
         return RespBean.success(order.getId());
     }
 

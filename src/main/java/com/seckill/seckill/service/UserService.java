@@ -14,7 +14,6 @@ import com.seckill.seckill.vo.RespBean;
 import com.seckill.seckill.vo.RespBeanEnum;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
@@ -27,22 +26,20 @@ import org.apache.commons.lang3.StringUtils;
 public class UserService {
 
     @Value("${server.servlet.context-path}")
-    private String contextPath; 
-    
+    private String contextPath;
+
     @Autowired
     private UserMapper userMapper;
-    
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private CartService cartService;
-    
-    public RespBean login(String email, String password, int expiredSec, HttpServletResponse response, HttpServletRequest request) {
+    public RespBean login(String email, String password, int expiredSec, HttpServletResponse response,
+            HttpServletRequest request) {
         if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
-        
+
         User user = userMapper.selectUserByEmail(email);
         if (user == null) {
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
