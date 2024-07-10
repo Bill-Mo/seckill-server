@@ -47,8 +47,12 @@ Now the project has been developed to the stage of user authentication, web mall
     spring.datasource.password
     ```
 
-3. **Run the application:**
-    
+3. **Dump the sql file:**
+
+    Dump the `sql_dump.sql` file to your MySQL database.
+
+4. **Run the application:**
+
     Run the `SeckillApplication.java`
 
     Visit `localhost:8080/seckill/index` to start using the Seckill Mall.
