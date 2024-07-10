@@ -37,7 +37,14 @@ jobs:
 
       - name: List target directory
         run: ls -al target
-      
+        
+      - name: Check for JAR file
+        run: |
+          if [ ! -f target/seckill-0.0.1-SNAPSHOT.jar ]; then
+            echo "JAR file not found!"
+            exit 1
+          fi
+          echo "JAR file found."
       -
         name: Build and push
         uses: docker/build-push-action@v6
